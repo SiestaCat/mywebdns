@@ -45,7 +45,7 @@ function headerfile($title) {
 	extract($line);
 	$_SESSION['session_language'] = "$LANGUAGE";
 
-echo <<< EOB
+?>
 	<HTML>
 	<HEAD>
 		<META CONTENT=NO-CACHE HTTP-EQUIV=PRAGMA>
@@ -54,10 +54,10 @@ echo <<< EOB
 	</HEAD>
 
 	<BODY BGCOLOR="#FFFFFF">
-	<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript" SRC="/configure/languages/$_SESSION['session_language']/functions.js"></SCRIPT>
-EOB;
+	<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript" SRC="/configure/languages/<?=$_SESSION['session_language']?>/functions.js"></SCRIPT>
+<?php
 	if ($title != "") {
-		echo "\n";
+
 echo <<< EOB
 
 	<DIV ALIGN=CENTER><BR>

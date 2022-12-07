@@ -2,7 +2,7 @@
 require("./include.php");
 $conn = connect_db();
 
-echo <<< EOB
+?>
 <HTML>
 <HEAD>
 <META CONTENT=NO-CACHE HTTP-EQUIV=PRAGMA>
@@ -18,14 +18,14 @@ echo <<< EOB
 		<TR><TD>&nbsp;</TD></TR> 
 
 		<TR BGCOLOR="#DDDDDD"> <TD><IMG ALT="" BORDER=0 HEIGHT=1 SRC="/images/spacer.gif" WIDTH=1><BR></TD></TR> 
-		<TR><TD><FONT COLOR="#DDDDDD"><TT><B>$M_user:</B> $_SESSION['session_username']</TT></FONT></TD></TR>
-		<TR><TD><FONT COLOR="#DDDDDD"><TT><B>$M_group:</B> $_SESSION['session_groups']  </TT></FONT></TD></TR>
+		<TR><TD><FONT COLOR="#DDDDDD"><TT><B>$M_user:</B> <?=$_SESSION['session_username']?></TT></FONT></TD></TR>
+		<TR><TD><FONT COLOR="#DDDDDD"><TT><B>$M_group:</B> <?=$_SESSION['session_groups']?>  </TT></FONT></TD></TR>
 		<TR BGCOLOR="#DDDDDD"> <TD><IMG ALT="" BORDER=0 HEIGHT=1 SRC="/images/spacer.gif" WIDTH=1><BR></TD></TR> 
 		<TR><TD>&nbsp;</TD></TR> 
 
 		<TR><TD><SPAN CLASS=TESTOARANCIO>$M1_title</SPAN></TD></TR> 
 		<TR BGCOLOR="#DDDDDD"> <TD><IMG ALT="" BORDER=0 HEIGHT=1 SRC="/images/spacer.gif" WIDTH=1><BR></TD></TR> 
-EOB;
+<?php
 		if ($_SESSION['session_groups'] == "administration") {
 			echo "\t\t\<TR><TD><A CLASS=LINKGRIGIO HREF=\"dns/adddns.php\"	TARGET=\"mainFrame\">$M1_item1</A></TD></TR>\n";
 		}
