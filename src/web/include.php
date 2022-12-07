@@ -10,7 +10,7 @@ function connect_db() {
         global $DBdatabase, $DBusername, $DBpassword, $DBhost;
         $dblink = mysqli_connect($DBhost, $DBusername, $DBpassword, $DBdatabase) or die("\nERROR: cannot to connect to MySQL server\n\n");
 
-	session_start();
+	@session_start();
 
         return($dblink);
 }
@@ -82,7 +82,7 @@ function ipdot2iplong($ipdot) {
 	$conn1 = connect_db();
         $sql = "SELECT ip2long('$ipdot');";
         $result = mysqli_query($conn1,$sql) or die(_SQLQueryError);
-        $out = mysql_fetch_row($result);
+        $out = mysqli_fetch_row($result);
         return ($out[0]);
 	mysqli_close($conn1);
 }
@@ -92,7 +92,7 @@ function iplong2ipdot($iplong) {
 	$conn1 = connect_db();
         $sql = "SELECT long2ip($iplong);";
         $result = mysqli_query($conn1,$sql) or die(_SQLQueryError);
-        $out = mysql_fetch_row($result);
+        $out = mysqli_fetch_row($result);
         return ($out[0]);
 	mysqli_close($conn1);
 }
@@ -102,7 +102,7 @@ function maskdot2masklong($maskdot) {
 	$conn1 = connect_db();
 	$sql = "SELECT maskdot2masklong('$maskdot');";
 	$result = mysqli_query($conn1,$sql) or die(_SQLQueryError);
-	if (($out = mysql_fetch_row($result)) != NULL)
+	if (($out = mysqli_fetch_row($result)) != NULL)
 		return ($out[0]);
 	else
 		return -1;
@@ -116,7 +116,7 @@ function masklong2maskdot($masklong) {
 	$conn1 = connect_db();
         $sql = "SELECT masklong2maskdot($masklong);";
         $result = mysqli_query($conn1,$sql) or die(_SQLQueryError);
-        $out = mysql_fetch_row($result);
+        $out = mysqli_fetch_row($result);
         return ($out[0]);
 	mysqli_close($conn1);
 }
@@ -181,7 +181,7 @@ function checkdns() {
 	$conn1 = connect_db();
 	$sql= "SELECT id FROM dns;";
 	$result = mysqli_query($conn1,$sql) or die(_SQLQueryError);
-	if (mysql_fetch_row($result)==NULL)
+	if (mysqli_fetch_row($result)==NULL)
 		return (0);
 	else
 		return (1);
