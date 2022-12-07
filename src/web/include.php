@@ -31,19 +31,10 @@ if (!isset($_SESSION["session_language"])) {
 		$_SESSION['session_record_mx'] = $RECORD_MX;
 		$_SESSION['session_record_a'] = $RECORD_A;
 		$_SESSION['session_record_ptr'] = $RECORD_PTR;
-		$_SESSION['session_record_cname'] = $RECORD_CNAME;
-
-		$session_version = $_SESSION['session_version'];
-		$session_language = $_SESSION['session_language'];
-		$session_record_ns = $_SESSION['session_record_ns'];
-		$session_record_mx = $_SESSION['session_record_mx'];
-		$session_record_a = $_SESSION['session_record_a'];
-		$session_record_ptr = $_SESSION['session_record_ptr'];
-		$session_record_cname = $_SESSION['session_record_cname'];
-	
+		$_SESSION['session_record_cname'] = $RECORD_CNAME;	
 }
 
-require(__DIR__ . "/configure/languages/$session_language/language.php");
+require(__DIR__ . "/configure/languages/".$_SESSION['session_language']."/language.php");
 
 // Funzione di stampa dell'intestazione del file
 function headerfile($title) {
@@ -52,7 +43,7 @@ function headerfile($title) {
 	$result = mysqli_query($conn1,$sql) or die(_SQLQueryError);
 	$line = mysqli_fetch_array($result);
 	extract($line);
-	$session_language = "$LANGUAGE";
+	$_SESSION['session_language'] = "$LANGUAGE";
 
 echo <<< EOB
 	<HTML>
@@ -63,7 +54,7 @@ echo <<< EOB
 	</HEAD>
 
 	<BODY BGCOLOR="#FFFFFF">
-	<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript" SRC="/configure/languages/$session_language/functions.js"></SCRIPT>
+	<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript" SRC="/configure/languages/$_SESSION['session_language']/functions.js"></SCRIPT>
 EOB;
 	if ($title != "") {
 		echo "\n";

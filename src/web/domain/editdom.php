@@ -220,16 +220,16 @@ EOB;
 	}
 
 	if ($ZONEMASTERTYPE == "M") 
-		$max_record_added = $session_record_ns + $session_record_mx + $session_record_a + $session_record_cname;
+		$max_record_added = $_SESSION['session_record_ns'] + $_SESSION['session_record_mx'] + $_SESSION['session_record_a'] + $_SESSION['session_record_cname'];
 	else
-		$max_record_added = $session_record_ns + $session_record_mx + $session_record_ptr;
-	$counter_rec1 = $session_record_ns;
-	$counter_rec2 = $counter_rec1 + $session_record_mx;
+		$max_record_added = $_SESSION['session_record_ns'] + $_SESSION['session_record_mx'] + $_SESSION['session_record_ptr'];
+	$counter_rec1 = $_SESSION['session_record_ns'];
+	$counter_rec2 = $counter_rec1 + $_SESSION['session_record_mx'];
 	if ($ZONEMASTERTYPE == "M") {
-		$counter_rec3 = $counter_rec2 + $session_record_a;
-		$counter_rec4 = $counter_rec3 + $session_record_cname;
+		$counter_rec3 = $counter_rec2 + $_SESSION['session_record_a'];
+		$counter_rec4 = $counter_rec3 + $_SESSION['session_record_cname'];
 	} else
-		$counter_rec3 = $counter_rec2 + $session_record_ptr;
+		$counter_rec3 = $counter_rec2 + $_SESSION['session_record_ptr'];
 
 	// Inserisco i record di aggiunta
 	for ($i=1; $i<=$max_record_added; $i++) {

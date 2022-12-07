@@ -14,8 +14,6 @@ if (!isset($PHP_AUTH_USER)) {
 	extract($line);
 	$_SESSION['session_username'] = $PHP_AUTH_USER;
 	$_SESSION['session_groups'] = $GROUPS;
-	$session_username = $_SESSION['session_username'];
-	$session_groups = $_SESSION['session_groups'];
 
 echo <<< EOB
 

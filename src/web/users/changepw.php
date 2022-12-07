@@ -13,7 +13,7 @@ if (!checkdns()) {
 #
 if (isset($setpwd)) {
 	headerfile(_ChangePwd);
-	$sql = "SELECT * FROM mysql_auth WHERE username='$session_username';";
+	$sql = "SELECT * FROM mysql_auth WHERE username='$_SESSION['session_username']';";
         $result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
 	$out = mysqli_fetch_array($result);
 	extract($out);

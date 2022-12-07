@@ -2,7 +2,7 @@
 require("../include.php");
 $conn=connect_db();
 
-if ($session_groups != "administration") {
+if ($_SESSION['session_groups'] != "administration") {
         headerfile("");
         showerror(_AccessDenied);
 }
@@ -62,11 +62,11 @@ echo <<< EOB
 	</TR>
 	<TR>
         	<TD WIDTH=10% BGCOLOR="#DDDDDD" WIDTH=60% NOWRAP ALIGN=RIGHT VALIGN=MIDDLE><FONT FACE=Lucida SIZE=3><B>$Mod_New_Record</B></FONT></TD>
-		<TD WIDTH=10% NOWRAP ALIGN=CENTER VALIGN=MIDDLE><FONT FACE=Lucida SIZE=3> <INPUT TYPE=TEXT MAXLENGHT=2 SIZE=4 NAME=myrecord_ns VALUE='$session_record_ns'></TD>
-		<TD WIDTH=10% NOWRAP ALIGN=CENTER VALIGN=MIDDLE><FONT FACE=Lucida SIZE=3> <INPUT TYPE=TEXT MAXLENGHT=2 SIZE=4 NAME=myrecord_mx VALUE='$session_record_mx'></TD>
-		<TD WIDTH=10% NOWRAP ALIGN=CENTER VALIGN=MIDDLE><FONT FACE=Lucida SIZE=3> <INPUT TYPE=TEXT MAXLENGHT=2 SIZE=4 NAME=myrecord_a VALUE='$session_record_a'></TD>
-		<TD WIDTH=10% NOWRAP ALIGN=CENTER VALIGN=MIDDLE><FONT FACE=Lucida SIZE=3> <INPUT TYPE=TEXT MAXLENGHT=2 SIZE=4 NAME=myrecord_ptr VALUE='$session_record_ptr'></TD>
-		<TD WIDTH=10% NOWRAP ALIGN=CENTER VALIGN=MIDDLE><FONT FACE=Lucida SIZE=3> <INPUT TYPE=TEXT MAXLENGHT=2 SIZE=4 NAME=myrecord_cname VALUE='$session_record_cname'></TD>
+		<TD WIDTH=10% NOWRAP ALIGN=CENTER VALIGN=MIDDLE><FONT FACE=Lucida SIZE=3> <INPUT TYPE=TEXT MAXLENGHT=2 SIZE=4 NAME=myrecord_ns VALUE='$_SESSION['session_record_ns']'></TD>
+		<TD WIDTH=10% NOWRAP ALIGN=CENTER VALIGN=MIDDLE><FONT FACE=Lucida SIZE=3> <INPUT TYPE=TEXT MAXLENGHT=2 SIZE=4 NAME=myrecord_mx VALUE='$_SESSION['session_record_mx']'></TD>
+		<TD WIDTH=10% NOWRAP ALIGN=CENTER VALIGN=MIDDLE><FONT FACE=Lucida SIZE=3> <INPUT TYPE=TEXT MAXLENGHT=2 SIZE=4 NAME=myrecord_a VALUE='$_SESSION['session_record_a']'></TD>
+		<TD WIDTH=10% NOWRAP ALIGN=CENTER VALIGN=MIDDLE><FONT FACE=Lucida SIZE=3> <INPUT TYPE=TEXT MAXLENGHT=2 SIZE=4 NAME=myrecord_ptr VALUE='$_SESSION['session_record_ptr']'></TD>
+		<TD WIDTH=10% NOWRAP ALIGN=CENTER VALIGN=MIDDLE><FONT FACE=Lucida SIZE=3> <INPUT TYPE=TEXT MAXLENGHT=2 SIZE=4 NAME=myrecord_cname VALUE='$_SESSION['session_record_cname']'></TD>
 		
 	</TR>
 	</TABLE>
@@ -91,8 +91,8 @@ echo <<< EOB
 	<H3>$stroutput</H3>
 	</DIV>
 EOB;
-	$session_language = "$language";
-	$sql = "UPDATE configuration SET language='$session_language', record_ns=$myrecord_ns, record_mx=$myrecord_mx, record_a=$myrecord_a, record_ptr=$myrecord_ptr, record_cname=$myrecord_cname WHERE id=1;";
+	$_SESSION['session_language'] = "$language";
+	$sql = "UPDATE configuration SET language='$_SESSION['session_language']', record_ns=$myrecord_ns, record_mx=$myrecord_mx, record_a=$myrecord_a, record_ptr=$myrecord_ptr, record_cname=$myrecord_cname WHERE id=1;";
 	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
 }
 ?>

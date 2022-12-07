@@ -14,19 +14,19 @@ echo <<< EOB
 <DIV ALIGN="LEFT">
 	<TABLE WIDTH="100%" BORDER="0">
 		<TR><TD ALIGN=CENTER><A HREF="main.php" TARGET="mainFrame"><img SRC="/images/logo.jpg" ALT="Homepage" BORDER=0 WIDTH=181 HEIGHT=58></TD></TR> 
-		<TR><TD ALIGN=RIGHT><FONT COLOR="#DDDDDD"><TT><B>ver. $session_version</B></TT></FONT></TD></TR>
+		<TR><TD ALIGN=RIGHT><FONT COLOR="#DDDDDD"><TT><B>ver. $_SESSION['session_version']</B></TT></FONT></TD></TR>
 		<TR><TD>&nbsp;</TD></TR> 
 
 		<TR BGCOLOR="#DDDDDD"> <TD><IMG ALT="" BORDER=0 HEIGHT=1 SRC="/images/spacer.gif" WIDTH=1><BR></TD></TR> 
-		<TR><TD><FONT COLOR="#DDDDDD"><TT><B>$M_user:</B> $session_username</TT></FONT></TD></TR>
-		<TR><TD><FONT COLOR="#DDDDDD"><TT><B>$M_group:</B> $session_groups  </TT></FONT></TD></TR>
+		<TR><TD><FONT COLOR="#DDDDDD"><TT><B>$M_user:</B> $_SESSION['session_username']</TT></FONT></TD></TR>
+		<TR><TD><FONT COLOR="#DDDDDD"><TT><B>$M_group:</B> $_SESSION['session_groups']  </TT></FONT></TD></TR>
 		<TR BGCOLOR="#DDDDDD"> <TD><IMG ALT="" BORDER=0 HEIGHT=1 SRC="/images/spacer.gif" WIDTH=1><BR></TD></TR> 
 		<TR><TD>&nbsp;</TD></TR> 
 
 		<TR><TD><SPAN CLASS=TESTOARANCIO>$M1_title</SPAN></TD></TR> 
 		<TR BGCOLOR="#DDDDDD"> <TD><IMG ALT="" BORDER=0 HEIGHT=1 SRC="/images/spacer.gif" WIDTH=1><BR></TD></TR> 
 EOB;
-		if ($session_groups == "administration") {
+		if ($_SESSION['session_groups'] == "administration") {
 			echo "\t\t\<TR><TD><A CLASS=LINKGRIGIO HREF=\"dns/adddns.php\"	TARGET=\"mainFrame\">$M1_item1</A></TD></TR>\n";
 		}
 echo <<< EOB
@@ -41,7 +41,7 @@ echo <<< EOB
 		<TR><TD><A CLASS=LINKGRIGIO HREF="domain/recoverdom.php?recoverdomain=ok"	TARGET="mainFrame">$M2_item3</A></TD></TR>
 		<TR><TD>&nbsp;</TD></TR>
 EOB;
-		if ($session_groups == "administration") {
+		if ($_SESSION['session_groups'] == "administration") {
 			echo "\t\t<TR><TD><SPAN CLASS=TESTOARANCIO>$M3_title</SPAN></TD></TR>\n";
 			echo "\t\t<TR BGCOLOR=\"#DDDDDD\">  <TD><IMG ALT=\"\" BORDER=0 HEIGHT=1 SRC=\"/images/spacer.gif\" WIDTH=1><BR></TD></TR>\n";
 			echo "\t\t<TR><TD><A CLASS=LINKGRIGIO HREF=\"admin/config.php?adminconfig=ok\"	TARGET=\"mainFrame\">$M3_item1</A></TD></TR/>\n";

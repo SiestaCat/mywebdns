@@ -2,7 +2,7 @@
 require("../include.php");
 $conn = connect_db();
 
-if ($session_groups != "administration") {
+if ($_SESSION['session_groups'] != "administration") {
 	headerfile("");
 	showerror(_AccessDenied);
 }

@@ -127,7 +127,7 @@ EOB;
 # Modifica DNS
 #
 if (isset($moddns)) {
-	if ($session_groups != "administration") {
+	if ($_SESSION['session_groups'] != "administration") {
         	headerfile("");
         	showerror(_AccessDenied);
 	}
@@ -191,7 +191,7 @@ EOB;
 }
 
 if (isset($continuemoddns)) {
-	if ($session_groups != "administration") {
+	if ($_SESSION['session_groups'] != "administration") {
         	headerfile("");
         	showerror(_AccessDenied);
 	}
@@ -210,7 +210,7 @@ if (isset($continuemoddns)) {
 # Cancella DNS
 #
 if (isset($deletedns)) {
-	if ($session_groups != "administration") {
+	if ($_SESSION['session_groups'] != "administration") {
         	headerfile("");
         	showerror(_AccessDenied);
 	}
@@ -252,7 +252,7 @@ echo <<< EOB
 		<TD WIDTH=40% NOWRAP ALIGN=LEFT VALIGN=MIDDLE><CLASS=LINKNERO><B>$DNSFQDN</B></TD>
 		<TD><A HREF=$PHP_SELF?infodns=OK&iddns=$ID><IMG SRC=/icons/info.gif BORDER=0 ALT='$Alt_Info'></TD>
 EOB;
-	if ($session_groups == "administration") {
+	if ($_SESSION['session_groups'] == "administration") {
 		echo "\t\t<TD><A HREF=$PHP_SELF?moddns=OK&iddns=$ID><IMG SRC=/icons/edit.gif BORDER=0 ALT='$Alt_Change'></TD>\n";
 		echo "\t\t<TD><A HREF='javascript:DelDNS(\"$DNSFQDN\",$ID)'><IMG SRC=/icons/trash.gif BORDER=0 ALT='$Alt_Delete'></TD>\n";
 	}
