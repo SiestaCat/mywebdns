@@ -29,8 +29,7 @@ set_time_limit(0);
 // Funzione di connessiona al DB
 function connect_db() {
 	global $DBdatabase, $DBusername, $DBpassword, $DBhost;
-	$dblink = @mysql_connect($DBhost, $DBusername, $DBpassword) or die("\nERROR: cannot to connect to MySQL server\n\n");
-	@mysql_select_db($DBdatabase) or die("\nERROR: cannot select database <$database>\n\n");
+	$dblink = @mysqli_connect($DBhost, $DBusername, $DBpassword,$DBdatabase) or die("\nERROR: cannot to connect to MySQL server\n\n");
 	return($dblink);
 }
 
@@ -389,7 +388,7 @@ for ($i=0; $i<count($zones); $i++) {
 			mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
 			// Selezione del'ID del dominio appena inserito
-			$iddom = mysql_insert_id();
+			$iddom = mysqli_insert_id($conn);
 
 			// Memorizzo gli IP dei DNS forward
 			for ($y=0; $y<count($ipdnsforward); $y++) {
@@ -479,7 +478,7 @@ for ($i=0; $i<count($zones); $i++) {
 			mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
 			// Selezione del'ID del dominio appena inserito
-			$iddom = mysql_insert_id();
+			$iddom = mysqli_insert_id($conn);
 		} else {
 			echo "ERROR: The domain $domain already exist with ID $out[0]\n";
 			exec (" echo \"ERROR: The domain $domain already exist with ID $out[0]\" >> $ReportLog");

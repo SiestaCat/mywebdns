@@ -101,8 +101,8 @@ EOB;
         else
                 $sql2 = "SELECT *, LPAD(ip,7,' ') AS newip FROM recordreverse WHERE iddom=$ID ORDER BY newip;";
 
-	$result2 = mysql_query($conn,$sql2) or die(_SQLQueryError);
-	$numelem = mysql_num_rows($result2);
+	$result2 = mysqli_query($conn,$sql2) or die(_SQLQueryError);
+	$numelem = mysqli_num_rows($result2);
 
 echo <<< EOB
 		<INPUT TYPE=HIDDEN NAME='id_domain' 	   VALUE='$ID'>
@@ -124,7 +124,7 @@ EOB;
 	$counter = 1;						// Contatore usato per il colore
 	$countermx = -1;					// Contatore dei record MX
 	$array_id_record = "";                                  // Array (stringa) contenente gli ID dei record
-	$length_str = strlen(mysql_num_rows($result2)+9);
+	$length_str = strlen(mysqli_num_rows($result2)+9);
 	while ($line = mysqli_fetch_array($result2)) {
 		extract($line);
 

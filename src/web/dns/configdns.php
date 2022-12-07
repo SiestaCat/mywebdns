@@ -115,7 +115,7 @@ EOB;
 	echo "\n";
         $sql = "SELECT * FROM domain WHERE iddns=$iddns;";
         $result = mysqli_query($conn,$sql) or die(_SQLQueryError);
-        $numdom = mysql_num_rows($result);
+        $numdom = mysqli_num_rows($result);
         echo "\t<BR>\n";
         echo "\t<CENTER><CLASS=LINKNERO>$Mod_DomainHandled<B>$numdom</B></CENTER>\n";
 	echo "\t</BODY>\n";

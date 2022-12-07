@@ -36,8 +36,7 @@ $EndHeaderReport = "*******************************************\n".
 // Funzione di connessiona al DB
 function connect_db() {
 	global $DBdatabase, $DBusername, $DBpassword, $DBhost;
-	$dblink = @mysql_connect($DBhost, $DBusername, $DBpassword) or die("\nERROR: cannot to connect to MySQL server\n\n"); 
-	@mysql_select_db($DBdatabase) or die("\nERROR: cannot select database  <$database>\n\n");
+	$dblink = @mysqli_connect($DBhost, $DBusername, $DBpassword,$DBdatabase) or die("\nERROR: cannot to connect to MySQL server\n\n"); 
 	return($dblink);
 }
 

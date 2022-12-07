@@ -76,7 +76,7 @@ if (isset($searchdomain)) {
 	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
 
 	if (($data = mysqli_fetch_array($result)) != NULL) {
-		echo "\n\t<BR><CENTER><FONT COLOR=darkblue><B>$Mod_RisSearch".mysql_num_rows($result)."</B></CENTER>\n";
+		echo "\n\t<BR><CENTER><FONT COLOR=darkblue><B>$Mod_RisSearch".mysqli_num_rows($result)."</B></CENTER>\n";
 echo <<< EOB
 	
 	<DIV ALIGN=CENTER>

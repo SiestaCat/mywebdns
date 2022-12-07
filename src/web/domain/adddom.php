@@ -138,7 +138,7 @@ if (isset($continueadddomain)) {
 			$serial = date("Ymd")."00";
 			$sql = "INSERT INTO domain VALUES (NULL,'$domainname',$level,'$data',86400,'$hostdns','$rootdns',$serial,86400,7200,2592000,86400,'$zonetype','$zonemastertype','A','0',$iddns,0);";
                         mysqli_query($conn,$sql) or die(_SQLQueryError);
-                        $iddom = mysql_insert_id();
+                        $iddom = mysqli_insert_id($conn);
                         header("Location: editdom.php?iddom=$iddom");
                         break;
 		// Slave & Forward
@@ -146,7 +146,7 @@ if (isset($continueadddomain)) {
 		case "F":
                 	$sql = "INSERT INTO domain VALUES (NULL,'$domainname',$level,'$data',0,'','',0,0,0,0,0,'$zonetype','$zonemastertype','A','0',$iddns,0,0);";
                         mysqli_query($conn,$sql) or die(_SQLQueryError);
-			$iddom = mysql_insert_id();
+			$iddom = mysqli_insert_id($conn);
 			header("Location: infodom.php?iddom=$iddom");
 			break;
 	}
