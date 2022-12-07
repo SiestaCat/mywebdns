@@ -39,7 +39,7 @@ function ipdot2iplong($ipdot) {
         $conn=connect_db();
         $sql = "SELECT ip2long('$ipdot');";
         $result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-        $out = mysql_fetch_row($result);
+        $out = mysqli_fetch_row($result);
         return ($out[0]);
         mysqli_close($conn);
 }
@@ -49,7 +49,7 @@ function iplong2ipdot($iplong) {
         $conn=connect_db();
         $sql = "SELECT long2ip($iplong);";
         $result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-        $out = mysql_fetch_row($result);
+        $out = mysqli_fetch_row($result);
         return ($out[0]);
         mysqli_close($conn);
 }
@@ -260,7 +260,7 @@ echo "\n";
 // Selezione dell'IDDNS dalla tabella DNS
 $sql = "SELECT id FROM dns WHERE dnsfqdn='$todnsserver';";
 $result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-if (($out = mysql_fetch_row($result)) == NULL ) die("\nERROR: not exist a record for the dns \"$todnsserver\" into table DNS.\n\n");
+if (($out = mysqli_fetch_row($result)) == NULL ) die("\nERROR: not exist a record for the dns \"$todnsserver\" into table DNS.\n\n");
 $iddns = $out[0];
 
 echo "$HeaderReport\n";
@@ -379,7 +379,7 @@ for ($i=0; $i<count($zones); $i++) {
 		$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
 		// Verifico che la zona non sia gia' inserita
-        	if (($out = mysql_fetch_row($result)) == NULL ) {
+        	if (($out = mysqli_fetch_row($result)) == NULL ) {
 			$data = date("Y-m-d");
 			// Registrazione del nuovo dominio
 			if (strstr($domain, ".in-addr.arpa"))
@@ -469,7 +469,7 @@ for ($i=0; $i<count($zones); $i++) {
 		$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
 		// Verifico che la zona non sia gia' inserita
-        	if (($out = mysql_fetch_row($result)) == NULL ) {
+        	if (($out = mysqli_fetch_row($result)) == NULL ) {
 			// Registrazione del nuovo dominio
 			if ($zonetype == "M")
 				$sql = "INSERT INTO domain VALUES (NULL,'$domain',$level,'$data',$ttl,'$hostdns','$rootdns',$serial,$refresh,$retry,$expire,$minimum,'$zonetype','$zonemastertype','A','0',$iddns,0);";

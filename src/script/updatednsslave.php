@@ -30,7 +30,7 @@ function ipdot2iplong($ipdot) {
         $conn=connect_db();
         $sql = "SELECT ip2long('$ipdot');";
         $result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-        $out = mysql_fetch_row($result);
+        $out = mysqli_fetch_row($result);
         return ($out[0]);
         mysqli_close($conn);
 }
@@ -40,7 +40,7 @@ function iplong2ipdot($iplong) {
         $conn=connect_db();
         $sql = "SELECT long2ip($iplong);";
         $result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-        $out = mysql_fetch_row($result);
+        $out = mysqli_fetch_row($result);
         return ($out[0]);
         mysqli_close($conn);
 }
