@@ -15,8 +15,8 @@ EOB;
 	echo "\n";
 	headerfile(_AdminUsers);
 	$sql = "SELECT * FROM mysql_auth;";
-	$result =  mysql_query($sql,$conn) or die(_SQLQueryError);
-	$out = mysql_fetch_array($result);
+	$result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+	$out = mysqli_fetch_array($result);
 
 echo <<< EOB
         <DIV ALIGN=CENTER>
@@ -50,7 +50,7 @@ EOB;
 			echo "\t\t<TD>&nbsp;</TD>\n";
 			echo "\t\t<TD>&nbsp;</TD>\n";
 		}
-	} while ($out = mysql_fetch_array($result));
+	} while ($out = mysqli_fetch_array($result));
 
 echo <<< EOB
         <TR>
@@ -69,12 +69,12 @@ if (isset($adduser)) {
 	// Verifico che l'utente non sia gi� inserito
 	$login = strtolower($login);
         $sql = "SELECT * FROM mysql_auth WHERE username='$login';";
-        $result =  mysql_query($sql,$conn) or die(_SQLQueryError);
-	if (mysql_fetch_array($result) != NULL)
+        $result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+	if (mysqli_fetch_array($result) != NULL)
 		header("Location: $PHP_SELF?adminusers=ok");
 	else {
 		$sql = "INSERT INTO mysql_auth VALUES('$login',password('$pwd'),'$group_name','$fullname');";
-		$result =  mysql_query($sql,$conn) or die(_SQLQueryError);
+		$result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
 		header("Location: $PHP_SELF?adminusers=ok");
 	}
 }
@@ -85,7 +85,7 @@ if (isset($adduser)) {
 if (isset($deluser)) {
 	// Cancellazione utente
         $sql = "DELETE FROM mysql_auth WHERE username='$login';";
-        $result =  mysql_query($sql,$conn) or die(_SQLQueryError);
+        $result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
 	header("Location: $PHP_SELF?adminusers=ok");
 }
 
@@ -95,8 +95,8 @@ if (isset($deluser)) {
 if (isset($edituser)) {
 	headerfile(_AdminUsers);
 	$sql = "SELECT * FROM mysql_auth WHERE username='$login';";
-        $result =  mysql_query($sql,$conn) or die(_SQLQueryError);
-	$out = mysql_fetch_array($result);
+        $result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+	$out = mysqli_fetch_array($result);
 	extract($out);
 
 echo <<< EOB
@@ -130,8 +130,8 @@ EOB;
         	echo "\n";
 		$current_groupname = $GROUPS;
 	        $sql = "SELECT * FROM mysql_auth_group WHERE groups<>'administration' ORDER BY groups;";
-       		$result =  mysql_query($sql,$conn) or die(_SQLQueryError);
-	        if (($out = mysql_fetch_array($result)) != NULL) {
+       		$result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+	        if (($out = mysqli_fetch_array($result)) != NULL) {
        	        	echo "\t\t\t<SELECT NAME=group_name>\n";
                 	do {
                         	extract($out); 
@@ -139,7 +139,7 @@ EOB;
                                 	echo "\t\t\t\t<OPTION SELECTED VALUE='$GROUPS'>$GROUPS</OPTION>\n";
                         	} else
                                 	echo "\t\t\t\t<OPTION VALUE='$GROUPS'>$GROUPS</OPTION>\n";
-                	} while ($out = mysql_fetch_array($result));
+                	} while ($out = mysqli_fetch_array($result));
                 	echo "\t\t\t</SELECT></TD>\n";
                 	echo "\t\t\t\t<INPUT TYPE=HIDDEN NAME=groupexist VALUE='SI'>\n";
         	} else {
@@ -164,7 +164,7 @@ EOB;
 if (isset($changeuser)) {
 	// Aggiorno la tabella degli utenti
         $sql = "UPDATE mysql_auth SET fullname='$new_fullname', password=PASSWORD('$new_pwd'), groups='$group_name' WHERE username='$login';";
-	$result =  mysql_query($sql,$conn) or die(_SQLQueryError);
+	$result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
         header("Location: $PHP_SELF?adminusers=ok");
 }
 

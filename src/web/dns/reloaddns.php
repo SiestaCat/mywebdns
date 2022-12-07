@@ -21,8 +21,8 @@ EOB;
 
 	// Inserire le istruzioni per il reload 
 	$sql = "SELECT * FROM dns WHERE id=$iddns;";
-	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
-	$out = mysql_fetch_array($result);
+	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+	$out = mysqli_fetch_array($result);
 	extract($out);
 	exec("$RNDCRELOAD&",$array);
 	showresult(_ReloadMsg);
@@ -32,8 +32,8 @@ headerfile(_ReloadDNSHeader);
 
 $i=0;
 $sql = "SELECT * FROM dns ORDER BY dnsfqdn;";
-$result = mysql_query($sql,$conn) or die(_SQLQueryError);
-$out = mysql_fetch_array($result);
+$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+$out = mysqli_fetch_array($result);
 
 echo <<< EOB
 	<DIV ALIGN=CENTER><FORM METHOD=POST ACTION=$PHP_SELF>
@@ -55,7 +55,7 @@ do {
 		$i++;
 	} else
 		echo "\t\t\t\t<OPTION VALUE='$ID'>$DNSFQDN</OPTION>\n";
-} while ($out = mysql_fetch_array($result));
+} while ($out = mysqli_fetch_array($result));
 echo <<< EOB
 			</SELECT>
 		</TD>
@@ -71,5 +71,5 @@ echo <<< EOB
 	</BODY>
 	</HTML>
 EOB;
-mysql_close($conn);
+mysqli_close($conn);
 ?>

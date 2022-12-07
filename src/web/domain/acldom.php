@@ -69,8 +69,8 @@ EOB;
 	//Tabella Allow-Notify
 	echo "\n";
 	$sql = "SELECT * FROM acldomain WHERE iddom=$iddom AND type='NOT' ORDER BY ip;";
-	$result =  mysql_query($sql,$conn) or die(_SQLQueryError);
-	if (($out = mysql_fetch_array($result)) != NULL) {
+	$result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+	if (($out = mysqli_fetch_array($result)) != NULL) {
 		$counter = 1;
                 do {
                         extract($out);
@@ -82,7 +82,7 @@ echo <<< EOB
 			</TR>
 EOB;
 			echo "\n";
-                } while ($out = mysql_fetch_array($result));
+                } while ($out = mysqli_fetch_array($result));
 	} else {
 
 echo <<< EOB
@@ -109,8 +109,8 @@ EOB;
 	echo "\n";
         //Tabella Allow-Query
         $sql = "SELECT * FROM acldomain WHERE iddom=$iddom AND type='QRY' ORDER BY ip;";
-        $result =  mysql_query($sql,$conn) or die(_SQLQueryError);
-        if (($out = mysql_fetch_array($result)) != NULL) {
+        $result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+        if (($out = mysqli_fetch_array($result)) != NULL) {
 		$counter = 1;
 		do {
 			extract($out);
@@ -122,7 +122,7 @@ echo <<< EOB
                         </TR>
 EOB;
                         echo "\n";
-		} while ($out = mysql_fetch_array($result));
+		} while ($out = mysqli_fetch_array($result));
         } else {
 echo <<< EOB
                         <TR>
@@ -148,8 +148,8 @@ EOB;
         echo "\n";
         //Tabella Allow-Transfer
         $sql = "SELECT * FROM acldomain WHERE iddom=$iddom AND type='TRX' ORDER BY ip;";
-        $result =  mysql_query($sql,$conn) or die(_SQLQueryError);
-        if (($out = mysql_fetch_array($result)) != NULL) {
+        $result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+        if (($out = mysqli_fetch_array($result)) != NULL) {
 		$counter = 1;
                 do {
                         extract($out);
@@ -161,7 +161,7 @@ echo <<< EOB
                         </TR>
 EOB;
                         echo "\n";
-                } while ($out = mysql_fetch_array($result));
+                } while ($out = mysqli_fetch_array($result));
         } else {
 echo <<< EOB
                         <TR>
@@ -186,8 +186,8 @@ EOB;
         echo "\n";
         //Tabella Allow-Update
         $sql = "SELECT * FROM acldomain WHERE iddom=$iddom AND type='UPD' ORDER BY ip;";
-        $result =  mysql_query($sql,$conn) or die(_SQLQueryError);
-        if (($out = mysql_fetch_array($result)) != NULL) {
+        $result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+        if (($out = mysqli_fetch_array($result)) != NULL) {
 		$counter = 1;
                 do {
                         extract($out);
@@ -199,7 +199,7 @@ echo <<< EOB
                         </TR>
 EOB;
                         echo "\n";
-                } while ($out = mysql_fetch_array($result));
+                } while ($out = mysqli_fetch_array($result));
         } else {
 echo <<< EOB
                         <TR>
@@ -221,7 +221,7 @@ echo <<< EOB
         </TABLE>
         </DIV>
 EOB;
-	mysql_close($conn);
+	mysqli_close($conn);
         exit;
 }
 
@@ -249,12 +249,12 @@ if (isset($continueaddacl)) {
 	// Inserimento della ACL (se non esiste)
 	$address = ipdot2iplong($ip);
 	$sql = "SELECT * FROM acldomain WHERE iddom=$iddomain AND ip=$address AND netmask=$netmask AND type='$acltype';";
-	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
-        if (mysql_fetch_array($result) == NULL) {
+	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+        if (mysqli_fetch_array($result) == NULL) {
 		$sql = "UPDATE domain SET state='M' WHERE id=$iddomain AND state<>'A';";
-		mysql_query($sql,$conn) or die(_SQLQueryError);
+		mysqli_query($conn,$sql) or die(_SQLQueryError);
 		$sql = "INSERT INTO acldomain VALUES (NULL,$iddomain,$address,$netmask,'$acltype');";
-		mysql_query($sql,$conn) or die(_SQLQueryError);
+		mysqli_query($conn,$sql) or die(_SQLQueryError);
 	}
         header("Location: $PHP_SELF?iddom=$iddomain");
 	exit;
@@ -262,9 +262,9 @@ if (isset($continueaddacl)) {
 
 if (isset($delacl)) {
 	$sql = "UPDATE domain SET state='M' WHERE id=$iddomain AND state<>'A';";
-	mysql_query($sql,$conn) or die(_SQLQueryError);
+	mysqli_query($conn,$sql) or die(_SQLQueryError);
 	$sql = "DELETE FROM acldomain WHERE id=$idacl;";
-	mysql_query($sql,$conn) or die(_SQLQueryError);
+	mysqli_query($conn,$sql) or die(_SQLQueryError);
         header("Location: $PHP_SELF?iddom=$iddomain");
 	exit;
 

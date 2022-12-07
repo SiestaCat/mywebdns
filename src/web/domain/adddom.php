@@ -44,8 +44,8 @@ if (isset($adddomain)) {
 if (isset($adddomain)) {
 	$i=0;
 	$sql = "SELECT * FROM dns ORDER BY dnsfqdn;";
-	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
-	$out = mysql_fetch_array($result);
+	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+	$out = mysqli_fetch_array($result);
 
 echo <<< EOB
 	<BR>
@@ -68,7 +68,7 @@ EOB;
 	                $i++;
         	} else
                 	echo "\t\t\t\t<OPTION VALUE='$ID'>$DNSFQDN</OPTION>\n";
-	} while ($out = mysql_fetch_array($result));
+	} while ($out = mysqli_fetch_array($result));
 echo <<< EOB
 			</SELECT></TD>
 	</TR>
@@ -95,7 +95,7 @@ echo <<< EOB
 	</BODY>
 	</HTML>
 EOB;
-	mysql_close($conn);
+	mysqli_close($conn);
 	exit;
 }
 
@@ -107,17 +107,17 @@ if (isset($continueadddomain)) {
 	}
 
 	$sql = "SELECT * FROM dns WHERE id=$iddns;";
-	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
-	$out = mysql_fetch_array($result);
+	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+	$out = mysqli_fetch_array($result);
 	extract($out);
 	$hostdns = $DNSFQDN.".";
 	$rootdns = "root.".$DNSFQDN.".";
 
 	$sql = "SELECT * FROM domain WHERE name='$domainname' AND state<>'D' AND iddns=$iddns;";
-       	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
+       	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
 
 	// Check sul dominio
-	if (mysql_fetch_array($result) != NULL) {
+	if (mysqli_fetch_array($result) != NULL) {
 		headerfile("");
 		showerror(_DomainRegError);
 	}
@@ -137,7 +137,7 @@ if (isset($continueadddomain)) {
 		case "M":
 			$serial = date("Ymd")."00";
 			$sql = "INSERT INTO domain VALUES (NULL,'$domainname',$level,'$data',86400,'$hostdns','$rootdns',$serial,86400,7200,2592000,86400,'$zonetype','$zonemastertype','A','0',$iddns,0);";
-                        mysql_query($sql,$conn) or die(_SQLQueryError);
+                        mysqli_query($conn,$sql) or die(_SQLQueryError);
                         $iddom = mysql_insert_id();
                         header("Location: editdom.php?iddom=$iddom");
                         break;
@@ -145,12 +145,12 @@ if (isset($continueadddomain)) {
 		case "S":
 		case "F":
                 	$sql = "INSERT INTO domain VALUES (NULL,'$domainname',$level,'$data',0,'','',0,0,0,0,0,'$zonetype','$zonemastertype','A','0',$iddns,0,0);";
-                        mysql_query($sql,$conn) or die(_SQLQueryError);
+                        mysqli_query($conn,$sql) or die(_SQLQueryError);
 			$iddom = mysql_insert_id();
 			header("Location: infodom.php?iddom=$iddom");
 			break;
 	}
-	mysql_close($conn);
+	mysqli_close($conn);
 	exit;
 }
 

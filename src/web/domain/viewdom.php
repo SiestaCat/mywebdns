@@ -13,8 +13,8 @@ echo "\n\t<HR>\n";
 
 if (isset($iddom)) {
 	$sql = "SELECT * FROM domain WHERE id=$iddom;";
-	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
-	$line = mysql_fetch_array($result);
+	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+	$line = mysqli_fetch_array($result);
 	extract($line);
 
 echo <<< EOB
@@ -67,12 +67,12 @@ EOB;
 	else
 		$sql = "SELECT *, LPAD(ip,7,' ') AS newip FROM recordreverse WHERE iddom=$ID ORDER BY newip;";
 		
-	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
+	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
 
 	echo "\n\t<BR>\n";
 	echo "\t<TABLE WIDTH=100% ALIGN=LEFT BORDER=0 CELLSPACING=0 CELLPADDING=2>\n";
 	$counter = 1;
-	while ($out = mysql_fetch_array($result)) {
+	while ($out = mysqli_fetch_array($result)) {
 		echo "\t<TR BGCOLOR=".(switchcolor($counter++)).">\n";
 
 		if ($ZONEMASTERTYPE == "M")
@@ -106,7 +106,7 @@ echo <<< EOB
 	</BODY>
 	</HTML>
 EOB;
-	mysql_close($conn);
+	mysqli_close($conn);
 	exit;
 }
 

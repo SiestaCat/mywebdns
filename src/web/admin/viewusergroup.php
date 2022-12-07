@@ -13,8 +13,8 @@ if ($session_groups != "administration") {
 if (isset($groupname)) {
 	headerfile(_UserGroup);
 	$sql = "SELECT * FROM mysql_auth WHERE groups='$groupname';";
-	$result =  mysql_query($sql,$conn) or die(_SQLQueryError);
-	if (($out = mysql_fetch_array($result)) != NULL) {
+	$result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+	if (($out = mysqli_fetch_array($result)) != NULL) {
 
 echo <<< EOB
 	<TITLE>myWebDNS</TITLE>
@@ -44,7 +44,7 @@ EOB;
                 echo "\t\t<TD WIDTH=45% NOWRAP ALIGN=LEFT VALIGN=MIDDLE><CLASS=LINKNERO>$USERNAME</TD>\n";
                 echo "\t\t<TD WIDTH=55% NOWRAP ALIGN=LEFT VALIGN=MIDDLE><CLASS=LINKNERO>$FULLNAME</TD>\n";
 		$index++;
-	} while ($out = mysql_fetch_array($result));
+	} while ($out = mysqli_fetch_array($result));
 
 echo <<< EOB
         <TR>

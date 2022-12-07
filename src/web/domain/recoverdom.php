@@ -41,8 +41,8 @@ if (isset($recoverdomain)) {
 	$i=0;
 	// Selezione dei domini cancellati e appartenenti ad un DNS configurato
 	$sql = "SELECT domain.ID, domain.NAME, domain.IDDNS, domain.ZONETYPE, dns.DNSFQDN FROM domain, dns WHERE domain.STATE='D' AND domain.IDDNS=dns.ID ORDER BY domain.NAME;";
-	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
-	if (($out = mysql_fetch_array($result)) != NULL) {
+	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+	if (($out = mysqli_fetch_array($result)) != NULL) {
 
 echo <<< EOB
 	<CENTER>
@@ -72,7 +72,7 @@ EOB;
                                 echo "\t\t<TD>&nbsp;</TD>\n";
 			echo "\t\t<TD><A HREF='javascript:RecoverDomain(\"$NAME\",$ID)'><IMG SRC=/icons/replace.gif BORDER=0 ALT='$Alt_Recover'></TD>\n";
                 	echo "\t</TR>\n";
-	        } while ($out = mysql_fetch_array($result));
+	        } while ($out = mysqli_fetch_array($result));
 echo <<< EOB
 	<TR>
 		<TD COLSPAN=7><HR></TD>
@@ -86,19 +86,19 @@ EOB;
 	        exit;
 	}
 	showmessage(_CheckRecoverDomain);
-	mysql_close($conn);
+	mysqli_close($conn);
 }
 
 if (isset($continuerecoverdomain)) {
 	$sql = "SELECT * FROM domain WHERE id=$iddom;";
-	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
-	$out = mysql_fetch_array($result);
+	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+	$out = mysqli_fetch_array($result);
 	extract($out);
 	$sql = "SELECT * FROM domain WHERE name='$NAME' AND iddns=$IDDNS AND state<>'D';";
-        $result = mysql_query($sql,$conn) or die(_SQLQueryError);
-        if (mysql_fetch_array($result) == NULL) {
+        $result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+        if (mysqli_fetch_array($result) == NULL) {
 		$sql = "UPDATE domain SET state='A' WHERE id=$iddom;";
-		$result = mysql_query($sql,$conn) or die(_SQLQueryError);
+		$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
 		header("Location: $PHP_SELF?recoverdomain=ok");
 	} else {
 		headerfile("");

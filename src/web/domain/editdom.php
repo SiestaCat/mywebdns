@@ -21,8 +21,8 @@ echo <<< EOB
 EOB;
 
 	$sql = "SELECT * FROM domain WHERE id=$iddom;";
-	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
-	$out = mysql_fetch_array($result);
+	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+	$out = mysqli_fetch_array($result);
 	extract($out);
 
 	// Calcolo il nuovo seriale della zona
@@ -101,7 +101,7 @@ EOB;
         else
                 $sql2 = "SELECT *, LPAD(ip,7,' ') AS newip FROM recordreverse WHERE iddom=$ID ORDER BY newip;";
 
-	$result2 = mysql_query($sql2,$conn) or die(_SQLQueryError);
+	$result2 = mysql_query($conn,$sql2) or die(_SQLQueryError);
 	$numelem = mysql_num_rows($result2);
 
 echo <<< EOB
@@ -125,7 +125,7 @@ EOB;
 	$countermx = -1;					// Contatore dei record MX
 	$array_id_record = "";                                  // Array (stringa) contenente gli ID dei record
 	$length_str = strlen(mysql_num_rows($result2)+9);
-	while ($line = mysql_fetch_array($result2)) {
+	while ($line = mysqli_fetch_array($result2)) {
 		extract($line);
 
 		$index_record++;				// Indice dei record
@@ -376,7 +376,7 @@ echo <<< EOB
         </TABLE>
         </DIV>
 EOB;
-	mysql_close($conn);
+	mysqli_close($conn);
 	exit;
 }
 
@@ -398,7 +398,7 @@ EOB;
 		$sql = "UPDATE domain SET state='A', serial=$soaserial, ttl=$soattl, refresh=$soarefr, retry=$soaret, expire=$soaexp, minimum=$soamin WHERE ID=$id_domain;";
 	else
 		$sql = "UPDATE domain SET state='M', serial=$soaserial, ttl=$soattl, refresh=$soarefr, retry=$soaret, expire=$soaexp, minimum=$soamin WHERE ID=$id_domain;";
-	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
+	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
 	
 	// Elimino i record cancellati
 	if ($array_deleted != "") {
@@ -408,7 +408,7 @@ EOB;
 				$sql = "DELETE FROM recordmaster WHERE id=$buffer[$i];";
 			else
 				$sql = "DELETE FROM recordreverse WHERE id=$buffer[$i];";
-			$result = mysql_query($sql,$conn) or die(_SQLQueryError);
+			$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
 		}
 	}
 
@@ -426,7 +426,7 @@ EOB;
 					$sql = "UPDATE recordmaster SET name='$data[1]', ttl=$data[2], priority=$data[4], hosttarget='$data[5]' WHERE id=$data[0];";
 			} else 
 			 	$sql = "UPDATE recordreverse SET ip='$data[1]', ttl=$data[2], priority=$data[4], hosttarget='$data[5]' WHERE id=$data[0];";
-			$result = mysql_query($sql,$conn) or die(_SQLQueryError);
+			$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
 		}
 	}
 
@@ -444,7 +444,7 @@ EOB;
 					$sql = "INSERT INTO recordmaster VALUES(NULL,$id_domain,'$data[1]',$data[2],'$data[3]',$data[4],'$data[5]',0);";
                         } else
 				$sql = "INSERT INTO recordreverse VALUES(NULL,$id_domain,'$data[1]',$data[2],'$data[3]',$data[4],'$data[5]');";
-			$result = mysql_query($sql,$conn) or die(_SQLQueryError);
+			$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
                 }
         }
 }

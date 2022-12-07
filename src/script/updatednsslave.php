@@ -29,20 +29,20 @@ function connect_db() {
 function ipdot2iplong($ipdot) {
         $conn=connect_db();
         $sql = "SELECT ip2long('$ipdot');";
-        $result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+        $result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
         $out = mysql_fetch_row($result);
         return ($out[0]);
-        mysql_close($conn);
+        mysqli_close($conn);
 }
 
 // Funzione per transformazione IP: long form --> dot form
 function iplong2ipdot($iplong) {
         $conn=connect_db();
         $sql = "SELECT long2ip($iplong);";
-        $result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+        $result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
         $out = mysql_fetch_row($result);
         return ($out[0]);
-        mysql_close($conn);
+        mysqli_close($conn);
 }
 
 // Funzione di scrittura di un array in un file
@@ -58,15 +58,15 @@ function insertACL($iddom, $acltype, $allow) {
 	global $conn, $arraynamed;
 
 	$sql = "SELECT * FROM acldomain WHERE iddom=$iddom AND type='$acltype' ORDER BY ip;";
-        $resdom = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+        $resdom = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
-	if (($outdom = mysql_fetch_array($resdom)) != NULL ) {
+	if (($outdom = mysqli_fetch_array($resdom)) != NULL ) {
         	$arraynamed[] = "\t$allow {\n";
                	do {
 	               	extract ($outdom);
                         $ip = iplong2ipdot($IP);
                	        $arraynamed[] = "\t\t$ip/$NETMASK;\n";
-	        } while ($outdom = mysql_fetch_array($resdom));
+	        } while ($outdom = mysqli_fetch_array($resdom));
         	$arraynamed[] = "\t};\n";
 	}
 }
@@ -85,8 +85,8 @@ $conn = connect_db();
 
 // Check del DNS inserito
 $sql = "SELECT * FROM dns WHERE dnsfqdn='$dnstoupdate';";
-$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-if (($out = mysql_fetch_array($result)) == NULL )
+$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+if (($out = mysqli_fetch_array($result)) == NULL )
 	die("\nERROR: DNS <$dnstoupdate> is not configured into DB\n\n");
 
 $iddns = $out[ID];
@@ -107,8 +107,8 @@ touch($filenamed);
 $arraynamed = array();
 
 $sql = "SELECT * FROM domain WHERE iddns=$iddns AND state<>'D' ORDER BY name;";
-$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-if (($out = mysql_fetch_array($result)) != NULL ) {
+$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+if (($out = mysqli_fetch_array($result)) != NULL ) {
 	do {
 		extract ($out);
 		
@@ -129,26 +129,26 @@ if (($out = mysql_fetch_array($result)) != NULL ) {
 				   $arraynamed[] = "\tfile \"$NAME.zone\";\n";
 				   $arraynamed[] = "\tmasters {\n";
 				   $sql = "SELECT * FROM ipdnsmaster WHERE iddom=$ID ORDER BY ip;";
-				   $resdom = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-				   if (($outdom = mysql_fetch_array($resdom)) != NULL ) {
+				   $resdom = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+				   if (($outdom = mysqli_fetch_array($resdom)) != NULL ) {
 					do {
 						extract ($outdom);
 						$ip = iplong2ipdot($IP);
 						$arraynamed[] = "\t\t$ip;\n";
-					} while ($outdom = mysql_fetch_array($resdom));
+					} while ($outdom = mysqli_fetch_array($resdom));
 				   }
 				   $arraynamed[] = "\t};\n";
 				   break;
 			case "F" : $arraynamed[] = "\ttype forward;\n";
 				   $arraynamed[] = "\tforwarders {\n";
 				   $sql = "SELECT * FROM ipdnsforwarders WHERE iddom=$ID ORDER BY ip;";
-				   $resdom = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-				   if (($outdom = mysql_fetch_array($resdom)) != NULL ) {
+				   $resdom = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+				   if (($outdom = mysqli_fetch_array($resdom)) != NULL ) {
 					do {
 						extract ($outdom);
 						$ip = iplong2ipdot($IP);
 						$arraynamed[] = "\t\t$ip;\n";
-					} while ($outdom = mysql_fetch_array($resdom));
+					} while ($outdom = mysqli_fetch_array($resdom));
 				   }
 				   $arraynamed[] = "\t};\n";
 				   break;
@@ -162,7 +162,7 @@ if (($out = mysql_fetch_array($result)) != NULL ) {
 
 		$arraynamed[] = "};\n";
 		$arraynamed[] = "\n";
-	} while ($out = mysql_fetch_array($result));
+	} while ($out = mysqli_fetch_array($result));
 
 	writefile($filenamed, $arraynamed);
 }

@@ -8,14 +8,14 @@ if (!isset($PHP_AUTH_USER)) {
 	Header("HTTP/1.0 401 Accesso negato!!!");
 	exit;
 } else {
-	session_register("session_username");
-        session_register("session_groups");
 	$sql = "SELECT * FROM mysql_auth WHERE username='$PHP_AUTH_USER';";
-	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
-	$line = mysql_fetch_array($result);
+	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+	$line = mysqli_fetch_array($result);
 	extract($line);
-	$session_username = "$PHP_AUTH_USER";
-	$session_groups = "$GROUPS";
+	$_SESSION['session_username'] = $PHP_AUTH_USER;
+	$_SESSION['session_groups'] = $GROUPS;
+	$session_username = $_SESSION['session_username'];
+	$session_groups = $_SESSION['session_groups'];
 
 echo <<< EOB
 

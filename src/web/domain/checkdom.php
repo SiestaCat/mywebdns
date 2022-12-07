@@ -13,8 +13,8 @@ if (!isset($nslookup) && !isset($dig) && !isset($whois))
 	showerror(_DomainError);
 
 $query = "SELECT name FROM domain WHERE id=$iddom;";
-$result = mysql_query($query,$conn) or die(_SQLQueryError);
-$data = mysql_fetch_array($result);
+$result = mysqli_query($conn,$query) or die(_SQLQueryError);
+$data = mysqli_fetch_array($result);
 
 headerfile("");
 echo "\n";

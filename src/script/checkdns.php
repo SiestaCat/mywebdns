@@ -45,20 +45,20 @@ function connect_db() {
 function ipdot2iplong($ipdot) {
         $conn=connect_db();
         $sql = "SELECT ip2long('$ipdot');";
-        $result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+        $result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
         $out = mysql_fetch_row($result);
         return ($out[0]);
-        mysql_close($conn);
+        mysqli_close($conn);
 }
 
 // Funzione per transformazione IP: long form --> dot form
 function iplong2ipdot($iplong) {
         $conn=connect_db();
         $sql = "SELECT long2ip($iplong);";
-        $result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+        $result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
         $out = mysql_fetch_row($result);
         return ($out[0]);
-        mysql_close($conn);
+        mysqli_close($conn);
 }
 
 // Funzione di scrittura di un array in un file
@@ -97,8 +97,8 @@ function checkipmaster($iddom) {
 	global $conn;
 
 	$sql = "SELECT * FROM ipdnsmaster WHERE iddom=$iddom ORDER BY ip;";
-	$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-	if (mysql_fetch_array($result) != NULL )
+	$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+	if (mysqli_fetch_array($result) != NULL )
 		return (1);
 	else
 		return (0);
@@ -109,8 +109,8 @@ function checkipforwarders($iddom) {
 	global $conn;
 
 	$sql = "SELECT * FROM ipdnsforwarders WHERE iddom=$iddom ORDER BY ip;";
-	$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-	if (mysql_fetch_array($result) != NULL )
+	$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+	if (mysqli_fetch_array($result) != NULL )
 		return (1);
 	else
 		return (0);
@@ -151,8 +151,8 @@ $conn = connect_db();
 
 // Check del DNS inserito
 $sql = "SELECT * FROM dns WHERE dnsfqdn='$dnstocheck';";
-$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-if (($out = mysql_fetch_array($result)) == NULL )
+$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+if (($out = mysqli_fetch_array($result)) == NULL )
 	die("\nERROR: DNS <$dnstocheck> is not configured into DB\n\n");
 
 $iddns = $out[ID];
@@ -163,8 +163,8 @@ if (substr($dirzones, $len-1, $len-1) != "/")
 
 // Selezione dei domini appartenenti al dns specificato
 $sql = "SELECT * FROM domain WHERE iddns=$iddns ORDER BY name;";
-$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-if (($out = mysql_fetch_array($result)) != NULL ) {
+$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+if (($out = mysqli_fetch_array($result)) != NULL ) {
 
 	exec ("echo \"$HeaderReport\" > $ReportLog");
 
@@ -253,7 +253,7 @@ if (($out = mysql_fetch_array($result)) != NULL ) {
 				}
 				break;
 		}
-	} while($out = mysql_fetch_array($result));
+	} while($out = mysqli_fetch_array($result));
 
 	if (count($filedom)>0) {
 		exec ("echo \"\nDomains without zonefile\" >> $ReportLog");

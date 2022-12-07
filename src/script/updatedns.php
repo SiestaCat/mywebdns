@@ -29,20 +29,20 @@ function connect_db() {
 function ipdot2iplong($ipdot) {
         $conn=connect_db();
         $sql = "SELECT ip2long('$ipdot');";
-        $result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+        $result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
         $out = mysql_fetch_row($result);
         return ($out[0]);
-        mysql_close($conn);
+        mysqli_close($conn);
 }
 
 // Funzione per transformazione IP: long form --> dot form
 function iplong2ipdot($iplong) {
         $conn=connect_db();
         $sql = "SELECT long2ip($iplong);";
-        $result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+        $result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
         $out = mysql_fetch_row($result);
         return ($out[0]);
-        mysql_close($conn);
+        mysqli_close($conn);
 }
 
 // Funzione di scrittura di un array in un file
@@ -58,15 +58,15 @@ function insertACL($iddom, $acltype, $allow) {
 	global $conn, $arraynamed;
 
 	$sql = "SELECT * FROM acldomain WHERE iddom=$iddom AND type='$acltype' ORDER BY ip;";
-        $resdom = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+        $resdom = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
-	if (($outdom = mysql_fetch_array($resdom)) != NULL ) {
+	if (($outdom = mysqli_fetch_array($resdom)) != NULL ) {
         	$arraynamed[] = "\t$allow {\n";
                	do {
 	               	extract ($outdom);
                         $ip = iplong2ipdot($IP);
                	        $arraynamed[] = "\t\t$ip/$NETMASK;\n";
-	        } while ($outdom = mysql_fetch_array($resdom));
+	        } while ($outdom = mysqli_fetch_array($resdom));
         	$arraynamed[] = "\t};\n";
 	}
 }
@@ -84,8 +84,8 @@ $conn = connect_db();
 
 // Check del DNS inserito
 $sql = "SELECT * FROM dns WHERE dnsfqdn='$dnstoupdate';";
-$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-if (($out = mysql_fetch_array($result)) == NULL )
+$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+if (($out = mysqli_fetch_array($result)) == NULL )
 	die("\nERROR: DNS <$dnstoupdate> is not configured into DB\n\n");
 
 $iddns = $out[ID];
@@ -106,8 +106,8 @@ $arraynamed = array();
 		
 // Cancellazione dei domini con STATE='D' nel dns selezionato
 $sql = "SELECT * FROM domain WHERE iddns=$iddns AND state='D';";
-$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-if (($out = mysql_fetch_array($result)) != NULL ) {
+$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+if (($out = mysqli_fetch_array($result)) != NULL ) {
 	do {
 		extract ($out);
 
@@ -117,7 +117,7 @@ if (($out = mysql_fetch_array($result)) != NULL ) {
 
 		// Cancellazione delle ACL sul dominio
 		$sql = "DELETE FROM acldomain WHERE iddom=$ID;";
-		mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+		mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
 		switch ($ZONETYPE) {
 			// Master
@@ -126,11 +126,11 @@ if (($out = mysql_fetch_array($result)) != NULL ) {
 				  switch ($ZONEMASTERTYPE) {
 					case "M": 
 				  		$sql = "DELETE FROM recordmaster WHERE iddom=$ID;";
-				  		mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+				  		mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 				  		break;
 					case "R": 
 				  		$sql = "DELETE FROM recordreverse WHERE iddom=$ID;";
-				  		mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+				  		mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 				  		break;
 				  }
 				  break;
@@ -138,30 +138,30 @@ if (($out = mysql_fetch_array($result)) != NULL ) {
 			case "S":
 				  // Cancellazione degli ip dei DNS MASTER
 				  $sql = "DELETE FROM ipdnsmaster WHERE iddom=$ID;";
-				  mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+				  mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 				  break;
 			// Forward
 			case "F":
 				  // Cancellazione degli ip dei DNS FORWARDERS
 				  $sql = "DELETE FROM ipdnsforwarders WHERE iddom=$ID;";
-				  mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+				  mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 				  break;
 		}
 
 		// Cancellazione del dominio
 		$sql = "DELETE FROM domain WHERE id=$ID;";
-		mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+		mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
 		// Cancellazione fisica del file di dominio
 		if (file_exists($dirzones.$filezone))
 			unlink($dirzones.$filezone);
 
-	} while ($out = mysql_fetch_array($result));
+	} while ($out = mysqli_fetch_array($result));
 }
 
 $sql = "SELECT * FROM domain WHERE iddns=$iddns ORDER BY name;";
-$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-if (($out = mysql_fetch_array($result)) != NULL ) {
+$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+if (($out = mysqli_fetch_array($result)) != NULL ) {
 	do {
 		extract ($out);
 		
@@ -179,26 +179,26 @@ if (($out = mysql_fetch_array($result)) != NULL ) {
 				   $arraynamed[] = "\tfile \"$NAME.zone\";\n";
 				   $arraynamed[] = "\tmasters {\n";
 				   $sql = "SELECT * FROM ipdnsmaster WHERE iddom=$ID ORDER BY ip;";
-				   $resdom = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-				   if (($outdom = mysql_fetch_array($resdom)) != NULL ) {
+				   $resdom = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+				   if (($outdom = mysqli_fetch_array($resdom)) != NULL ) {
 					do {
 						extract ($outdom);
 						$ip = iplong2ipdot($IP);
 						$arraynamed[] = "\t\t$ip;\n";
-					} while ($outdom = mysql_fetch_array($resdom));
+					} while ($outdom = mysqli_fetch_array($resdom));
 				   }
 				   $arraynamed[] = "\t};\n";
 				   break;
 			case "F" : $arraynamed[] = "\ttype forward;\n";
 				   $arraynamed[] = "\tforwarders {\n";
 				   $sql = "SELECT * FROM ipdnsforwarders WHERE iddom=$ID ORDER BY ip;";
-				   $resdom = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-				   if (($outdom = mysql_fetch_array($resdom)) != NULL ) {
+				   $resdom = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+				   if (($outdom = mysqli_fetch_array($resdom)) != NULL ) {
 					do {
 						extract ($outdom);
 						$ip = iplong2ipdot($IP);
 						$arraynamed[] = "\t\t$ip;\n";
-					} while ($outdom = mysql_fetch_array($resdom));
+					} while ($outdom = mysqli_fetch_array($resdom));
 				   }
 				   $arraynamed[] = "\t};\n";
 				   break;
@@ -212,15 +212,15 @@ if (($out = mysql_fetch_array($result)) != NULL ) {
 
 		$arraynamed[] = "};\n";
 		$arraynamed[] = "\n";
-	} while ($out = mysql_fetch_array($result));
+	} while ($out = mysqli_fetch_array($result));
 
 	writefile($filenamed, $arraynamed);
 }
 
 // Cancellazione dei domini con STATE='D' nei dns cancellati
 $sql = "SELECT DISTINCT domain.ID, domain.NAME, domain.ZONETYPE, domain.ZONEMASTERTYPE FROM dns,domain WHERE domain.state='D' AND domain.iddns<>dns.id;";
-$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-if (($out = mysql_fetch_array($result)) != NULL ) {
+$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+if (($out = mysqli_fetch_array($result)) != NULL ) {
         do {
                 extract ($out);
 
@@ -230,7 +230,7 @@ if (($out = mysql_fetch_array($result)) != NULL ) {
 
                 // Cancellazione delle ACL sul dominio
                 $sql = "DELETE FROM acldomain WHERE iddom=$ID;";
-                mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+                mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
                 switch ($ZONETYPE) {
                         // Master
@@ -239,11 +239,11 @@ if (($out = mysql_fetch_array($result)) != NULL ) {
                                   switch ($ZONEMASTERTYPE) {
                                         case "M":
                                                 $sql = "DELETE FROM recordmaster WHERE iddom=$ID;";
-                                                mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+                                                mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
                                                 break;
                                         case "R":
                                                 $sql = "DELETE FROM recordreverse WHERE iddom=$ID;";
-                                                mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+                                                mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
                                                 break;
                                   }
                                   break;
@@ -251,31 +251,31 @@ if (($out = mysql_fetch_array($result)) != NULL ) {
                         case "S":
                                   // Cancellazione degli ip dei DNS MASTER
                                   $sql = "DELETE FROM ipdnsmaster WHERE iddom=$ID;";
-                                  mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+                                  mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
                                   break;
                         // Forward
                         case "F":
                                   // Cancellazione degli ip dei DNS FORWARDERS
                                   $sql = "DELETE FROM ipdnsforwarders WHERE iddom=$ID;";
-                                  mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+                                  mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
                                   break;
                 }
 
                 // Cancellazione del dominio
                 $sql = "DELETE FROM domain WHERE id=$ID;";
-                mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+                mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
                 // Cancellazione fisica del file di dominio
                 if (file_exists($dirzones.$filezone))
                         unlink($dirzones.$filezone);
 
-        } while ($out = mysql_fetch_array($result));
+        } while ($out = mysqli_fetch_array($result));
 }
 
 // Selezione dei domini appartenenti al dns specificato
 $sql = "SELECT *, id AS IDDOMAIN, name AS NAMEDOM FROM domain WHERE iddns=$iddns AND state<>'N' ORDER BY namedom;";
-$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
-if (($out = mysql_fetch_array($result)) != NULL ) {
+$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+if (($out = mysqli_fetch_array($result)) != NULL ) {
 	do {
 		$arrayzone = array();
 		extract($out);
@@ -314,14 +314,14 @@ if (($out = mysql_fetch_array($result)) != NULL ) {
 						  switch ($ZONEMASTERTYPE) {
 							case "M":
 								  $sql = "SELECT * FROM recordmaster WHERE iddom=$IDDOMAIN ORDER BY type DESC ,name ASC, priority ASC, hosttarget ASC;";
-								  $resdom = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+								  $resdom = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 								  break;
 							case "R":
 								  $sql = "SELECT *, LPAD(ip,7,' ') AS newip FROM recordreverse WHERE iddom=$IDDOMAIN ORDER BY newip;";
-								  $resdom = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+								  $resdom = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 								  break;
 						  }
-						  if (($outdom = mysql_fetch_array($resdom)) != NULL) {
+						  if (($outdom = mysqli_fetch_array($resdom)) != NULL) {
 							do {
 								switch ($ZONEMASTERTYPE) {
 									case "M" : $record = str_pad($outdom[NAME],40,' ',STR_PAD_RIGHT);
@@ -346,7 +346,7 @@ if (($out = mysql_fetch_array($result)) != NULL ) {
 										  break;
 								}
 								$arrayzone[] = $record;
-							} while ($outdom = mysql_fetch_array($resdom));
+							} while ($outdom = mysqli_fetch_array($resdom));
 						  }
 
 					  	  // Scrittura fisica del file di dominio
@@ -372,9 +372,9 @@ if (($out = mysql_fetch_array($result)) != NULL ) {
 
 		// Modifica dello stato del dominio a N
 		$sql = "UPDATE domain SET state='N', md5='$domainmd5' WHERE id=$IDDOMAIN;";
-		mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+		mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
-	} while($out = mysql_fetch_array($result));
+	} while($out = mysqli_fetch_array($result));
 }
 
 ?>

@@ -14,8 +14,8 @@ if (isset($admingroups)) {
 	echo "\n";
 	headerfile(_AdminGroups);
 	$sql = "SELECT * FROM mysql_auth_group;";
-	$result =  mysql_query($sql,$conn) or die(_SQLQueryError);
-	$out = mysql_fetch_array($result);
+	$result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+	$out = mysqli_fetch_array($result);
 
 echo <<< EOB
         <DIV ALIGN=CENTER>
@@ -40,7 +40,7 @@ EOB;
                 echo "\t\t<TR BGCOLOR=".(switchcolor($counter++)).">\n";
 
 		$sql = "SELECT * FROM mysql_auth WHERE groups='$GROUPS';";
-       		$result_group =  mysql_query($sql,$conn) or die(_SQLQueryError);
+       		$result_group =  mysqli_query($conn,$sql) or die(_SQLQueryError);
         	echo "\t\t<TD WIDTH=35% NOWRAP ALIGN=LEFT VALIGN=MIDDLE><CLASS=LINKNERO><I>".mysql_num_rows($result_group)."</I></TD>\n";
 
                 echo "\t\t<TD WIDTH=35% NOWRAP ALIGN=LEFT VALIGN=MIDDLE><CLASS=LINKNERO>$GROUPS</TD>\n";
@@ -52,7 +52,7 @@ EOB;
 			echo "\t\t<TD>&nbsp;</TD>\n";
 			echo "\t\t<TD>&nbsp;</TD>\n";
 		}
-	} while ($out = mysql_fetch_array($result));
+	} while ($out = mysqli_fetch_array($result));
 
 echo <<< EOB
         <TR>
@@ -71,12 +71,12 @@ if (isset($addgroup)) {
 	// Verifico che il gruppo inserito non esista
 	$group_name = strtolower($group_name);
         $sql = "SELECT * FROM mysql_auth_group WHERE groups='$group_name';";
-        $result =  mysql_query($sql, $conn) or die(_SQLQueryError);
-	if (mysql_fetch_array($result) != NULL)
+        $result =  mysqli_query($conn, $sql) or die(_SQLQueryError);
+	if (mysqli_fetch_array($result) != NULL)
 		header("Location: $PHP_SELF?admingroups=ok");
 	else {
 		$sql = "INSERT INTO mysql_auth_group VALUES(NULL,'$group_name');";
-		$result =  mysql_query($sql, $conn) or die(_SQLQueryError);
+		$result =  mysqli_query($conn, $sql) or die(_SQLQueryError);
 		header("Location: $PHP_SELF?admingroups=ok");
 	}
 }
@@ -87,11 +87,11 @@ if (isset($addgroup)) {
 if (isset($delgroup)) {
 	// Cancellazione gruppo
         $sql = "DELETE FROM mysql_auth_group WHERE groups='$group_name';";
-        $result =  mysql_query($sql,$conn) or die(_SQLQueryError);
+        $result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
 
 	// Cancellazione degli utenti del gruppo appena rimosso
 	$sql = "DELETE FROM mysql_auth WHERE groups='$group_name';";
-	$result =  mysql_query($sql,$conn) or die(_SQLQueryError);
+	$result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
 	header("Location: $PHP_SELF?admingroups=ok");
 }
 
@@ -132,17 +132,17 @@ if (isset($changegroup)) {
         // Verifico che il gruppo inserito esista
         $new_group_name = strtolower($new_group_name);
         $sql = "SELECT * FROM mysql_auth_group WHERE groups='$new_group_name';";
-        $result =  mysql_query($sql,$conn) or die(_SQLQueryError);
-        if (mysql_fetch_array($result) != NULL)
+        $result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+        if (mysqli_fetch_array($result) != NULL)
                 header("Location: $PHP_SELF?admingroups=ok");
         else {
 		// Aggiorno la tabella dei gruppi
                 $sql = "UPDATE mysql_auth_group SET groups='$new_group_name' WHERE groups='$old_group_name'";
-                $result =  mysql_query($sql,$conn) or die(_SQLQueryError);
+                $result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
 
 		// Aggiorno la tabella degli utenti
                 $sql = "UPDATE mysql_auth SET groups='$new_group_name' WHERE groups='$old_group_name'";
-                $result =  mysql_query($sql,$conn) or die(_SQLQueryError);
+                $result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
                 header("Location: $PHP_SELF?admingroups=ok");
         }
 }

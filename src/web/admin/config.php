@@ -93,6 +93,6 @@ echo <<< EOB
 EOB;
 	$session_language = "$language";
 	$sql = "UPDATE configuration SET language='$session_language', record_ns=$myrecord_ns, record_mx=$myrecord_mx, record_a=$myrecord_a, record_ptr=$myrecord_ptr, record_cname=$myrecord_cname WHERE id=1;";
-	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
+	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
 }
 ?>

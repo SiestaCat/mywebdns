@@ -60,7 +60,7 @@ echo <<< EOB
         </DIV>
 EOB;
 	echo "\n";
-        mysql_close($conn);
+        mysqli_close($conn);
         exit;
 }
 
@@ -73,9 +73,9 @@ if (isset($searchdomain)) {
 
 	// Si selezionano tutti i domini tranne che quelli cancellati e apparteneneti ad un DNS configurato
 	$sql = "SELECT domain.ID, domain.NAME, domain.ZONETYPE, domain.ZONEMASTERTYPE, domain.LOCKDEL, dns.DNSFQDN FROM domain, dns WHERE domain.name LIKE '%$domain%' AND domain.state<>'D' AND domain.iddns=dns.id ORDER BY name;";
-	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
+	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
 
-	if (($data = mysql_fetch_array($result)) != NULL) {
+	if (($data = mysqli_fetch_array($result)) != NULL) {
 		echo "\n\t<BR><CENTER><FONT COLOR=darkblue><B>$Mod_RisSearch".mysql_num_rows($result)."</B></CENTER>\n";
 echo <<< EOB
 	
@@ -124,7 +124,7 @@ EOB;
 			else 
 				echo "\t\t<TD>&nbsp;</TD>\n";
 			echo "\t</TR>\n";
-		} while ($data = mysql_fetch_array($result));
+		} while ($data = mysqli_fetch_array($result));
 echo <<< EOB
 	<TR>
 		<TD COLSPAN=9><HR></TD>
@@ -144,7 +144,7 @@ EOB;
 #
 if (isset($deldomain)) {
 	$sql = "UPDATE domain SET state='D' WHERE id=$iddom;";
-	mysql_query($sql,$conn) or die(_SQLQueryError);
+	mysqli_query($conn,$sql) or die(_SQLQueryError);
 	header("Location: $PHP_SELF?searchdomain=ok&domain=$domain");
 	exit;
 }

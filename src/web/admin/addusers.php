@@ -43,8 +43,8 @@ EOB;
         echo "\n";
         $i = 0;
         $sql = "SELECT * FROM mysql_auth_group WHERE groups<>'administration' ORDER BY groups;";
-        $result =  mysql_query($sql,$conn) or die(_SQLQueryError);
-        if (($out = mysql_fetch_array($result)) != NULL) {
+        $result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+        if (($out = mysqli_fetch_array($result)) != NULL) {
                 echo "\t\t\t<SELECT NAME=group_name>\n";
                 do {
                         extract($out);
@@ -53,7 +53,7 @@ EOB;
                                 $i++;
                         } else
                                 echo "\t\t\t\t<OPTION VALUE='$GROUPS'>$GROUPS</OPTION>\n";
-                } while ($out = mysql_fetch_array($result));
+                } while ($out = mysqli_fetch_array($result));
                 echo "\t\t\t</SELECT></TD>\n";
                 echo "\t\t\t\t<INPUT TYPE=HIDDEN NAME=groupexist VALUE='SI'>\n";
         } else {

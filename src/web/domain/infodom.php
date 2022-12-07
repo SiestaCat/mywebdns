@@ -14,8 +14,8 @@ if (!checkdns()) {
 if (isset($iddom)) {
 	headerfile(_InfoDomainHeader);
         $sql = "SELECT * FROM domain WHERE id=$iddom;";
-        $result = mysql_query($sql, $conn) or die(_SQLQueryError);
-        $line = mysql_fetch_array($result);
+        $result = mysqli_query($conn, $sql) or die(_SQLQueryError);
+        $line = mysqli_fetch_array($result);
 	extract($line);
 
 	echo "\n";
@@ -92,8 +92,8 @@ EOB;
                           	break;
                 case "S": 	echo "\t\t<TD WIDTH=40% NOWRAP ALIGN=LEFT  VALIGN=MIDDLE><CLASS=LINKNERO>$Mod_Dom_Slv</TD>\n";
                 		$sql = "SELECT * FROM ipdnsmaster WHERE iddom=$ID ORDER BY ip;";
-                                $res =  mysql_query($sql,$conn) or die(_SQLQueryError);
-                                if (($out = mysql_fetch_array($res)) != NULL) {
+                                $res =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+                                if (($out = mysqli_fetch_array($res)) != NULL) {
                                         $counter = 1;
                                         do {
 						$ipdot = iplong2ipdot($out[IP]);
@@ -106,13 +106,13 @@ echo <<< EOB
 EOB;
 						echo "\n";
                                                 $counter++;
-                                        } while ($out = mysql_fetch_array($res));
+                                        } while ($out = mysqli_fetch_array($res));
                                 }
                                 break;
                 case "F":       echo "\t\t<TD WIDTH=40% NOWRAP ALIGN=LEFT  VALIGN=MIDDLE><CLASS=LINKNERO>$Mod_Dom_For</TD>\n";
                                 $sql = "SELECT * FROM ipdnsforwarders WHERE iddom=$ID ORDER BY ip;";
-                                $res =  mysql_query($sql,$conn) or die(_SQLQueryError);
-                                if (($out = mysql_fetch_array($res)) != NULL) {
+                                $res =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+                                if (($out = mysqli_fetch_array($res)) != NULL) {
                                         $counter = 1;
                                         do {
 						$ipdot = iplong2ipdot($out[IP]);
@@ -125,7 +125,7 @@ echo <<< EOB
 EOB;
 						echo "\n";
                                                 $counter++;
-                                        } while ($out = mysql_fetch_array($res));
+                                        } while ($out = mysqli_fetch_array($res));
                                 }
                                 break;
 
@@ -239,10 +239,10 @@ if (isset($continueaddip)) {
 			$sql = "SELECT * FROM ipdnsforwarders WHERE iddom=$iddomain AND ip=$address;"; 
 			break;
 	}
-        $result = mysql_query($sql,$conn) or die(_SQLQueryError);
-        if (mysql_fetch_array($result) == NULL) {
+        $result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+        if (mysqli_fetch_array($result) == NULL) {
                 $sql = "UPDATE domain SET state='M' WHERE id=$iddomain AND state<>'A';";
-                mysql_query($sql,$conn) or die(_SQLQueryError);
+                mysqli_query($conn,$sql) or die(_SQLQueryError);
 		switch ($zonetype) {
 	                case "S":
 				$sql = "INSERT INTO ipdnsmaster VALUES (NULL,$iddomain,$address);";
@@ -251,7 +251,7 @@ if (isset($continueaddip)) {
 				$sql = "INSERT INTO ipdnsforwarders VALUES (NULL,$iddomain,$address);";
 				break;
 		}
-                mysql_query($sql,$conn) or die(_SQLQueryError);
+                mysqli_query($conn,$sql) or die(_SQLQueryError);
         }
         header("Location: $PHP_SELF?iddom=$iddomain");
         exit;
@@ -262,7 +262,7 @@ if (isset($continueaddip)) {
 #
 if (isset($delip)) {
         $sql = "UPDATE domain SET state='M' WHERE id=$iddomain AND state<>'A';";
-        mysql_query($sql,$conn) or die(_SQLQueryError);
+        mysqli_query($conn,$sql) or die(_SQLQueryError);
 	switch ($zonetype) {
 		case "S":
         		$sql = "DELETE FROM ipdnsmaster WHERE id=$idip;";
@@ -271,7 +271,7 @@ if (isset($delip)) {
         		$sql = "DELETE FROM ipdnsforwarders WHERE id=$idip;";
 			break;
 	}
-        mysql_query($sql,$conn) or die(_SQLQueryError);
+        mysqli_query($conn,$sql) or die(_SQLQueryError);
         header("Location: $PHP_SELF?iddom=$iddomain");
         exit;
 }
@@ -281,8 +281,8 @@ if (isset($delip)) {
 #
 if (isset($lockdel)) {
         $sql = "UPDATE domain SET lockdel=1 WHERE id=$iddomain;";
-        mysql_query($sql,$conn) or die(_SQLQueryError);
-        mysql_query($sql,$conn) or die(_SQLQueryError);
+        mysqli_query($conn,$sql) or die(_SQLQueryError);
+        mysqli_query($conn,$sql) or die(_SQLQueryError);
         header("Location: $PHP_SELF?iddom=$iddomain");
         exit;
 }
@@ -292,7 +292,7 @@ if (isset($lockdel)) {
 #
 if (isset($unlockdel)) {
         $sql = "UPDATE domain SET lockdel=0 WHERE id=$iddomain;";
-        mysql_query($sql,$conn) or die(_SQLQueryError);
+        mysqli_query($conn,$sql) or die(_SQLQueryError);
         header("Location: $PHP_SELF?iddom=$iddomain");
         exit;
 }

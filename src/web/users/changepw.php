@@ -14,8 +14,8 @@ if (!checkdns()) {
 if (isset($setpwd)) {
 	headerfile(_ChangePwd);
 	$sql = "SELECT * FROM mysql_auth WHERE username='$session_username';";
-        $result =  mysql_query($sql,$conn) or die(_SQLQueryError);
-	$out = mysql_fetch_array($result);
+        $result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
+	$out = mysqli_fetch_array($result);
 	extract($out);
 
 echo <<< EOB
@@ -64,7 +64,7 @@ EOB;
 
 	// Aggiorno la tabella degli utenti
         $sql = "UPDATE mysql_auth SET password=PASSWORD('$new_pwd') WHERE username='$login';";
-	$result =  mysql_query($sql,$conn) or die(_SQLQueryError);
+	$result =  mysqli_query($conn,$sql) or die(_SQLQueryError);
 	showresult(_PwdChanged);
 }
 

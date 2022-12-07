@@ -38,20 +38,20 @@ function connect_db() {
 function ipdot2iplong($ipdot) {
         $conn=connect_db();
         $sql = "SELECT ip2long('$ipdot');";
-        $result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+        $result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
         $out = mysql_fetch_row($result);
         return ($out[0]);
-        mysql_close($conn);
+        mysqli_close($conn);
 }
 
 // Funzione per transformazione IP: long form --> dot form
 function iplong2ipdot($iplong) {
         $conn=connect_db();
         $sql = "SELECT long2ip($iplong);";
-        $result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+        $result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
         $out = mysql_fetch_row($result);
         return ($out[0]);
-        mysql_close($conn);
+        mysqli_close($conn);
 }
 
 // Verifica la correttezza di un indirizzo IP in dot form
@@ -184,7 +184,7 @@ function parsernamed($filenamed) {
                                			$named[$i] = strtolower($named[$i]);
 					} while (!eregi("};", $named[$i])); 
 
-					// Verifico se "};" sta da solo sulla linea e se la linea successiva è "};"
+					// Verifico se "};" sta da solo sulla linea e se la linea successiva ï¿½ "};"
 					if ((!eregi("^([\t]*)([[:space:]]*)allow-([a-z]*)",$named[$i])) && (eregi("^([\t]*)([[:space:]]*)};",$named[$i+1]))) {
 						$address = explode (" ",trim($named[$i]));
 						$j = 0;
@@ -259,7 +259,7 @@ echo "\n";
 
 // Selezione dell'IDDNS dalla tabella DNS
 $sql = "SELECT id FROM dns WHERE dnsfqdn='$todnsserver';";
-$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 if (($out = mysql_fetch_row($result)) == NULL ) die("\nERROR: not exist a record for the dns \"$todnsserver\" into table DNS.\n\n");
 $iddns = $out[0];
 
@@ -376,7 +376,7 @@ for ($i=0; $i<count($zones); $i++) {
 
 		// Selezione dell'ID della zona dalla tabella DOMAIN
 		$sql = "SELECT id FROM domain WHERE name='$domain' AND iddns=$iddns;";
-		$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+		$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
 		// Verifico che la zona non sia gia' inserita
         	if (($out = mysql_fetch_row($result)) == NULL ) {
@@ -386,7 +386,7 @@ for ($i=0; $i<count($zones); $i++) {
 				$sql = "INSERT INTO domain VALUES (NULL,'$domain',$level,'$data',0,'','',0,0,0,0,0,'$zonetype','R','A','0',$iddns,0);";
 			else
 				$sql = "INSERT INTO domain VALUES (NULL,'$domain',$level,'$data',0,'','',0,0,0,0,0,'$zonetype','M','A','0',$iddns,0);";
-			mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+			mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
 			// Selezione del'ID del dominio appena inserito
 			$iddom = mysql_insert_id();
@@ -395,7 +395,7 @@ for ($i=0; $i<count($zones); $i++) {
 			for ($y=0; $y<count($ipdnsforward); $y++) {
                 		$ip = ipdot2iplong($ipdnsforward[$y]);
                 		$sql = "INSERT INTO ipdnsforwarders VALUES (NULL,$iddom,$ip);";
-                		$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+                		$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 			}
 		} else {
 			echo "ERROR: The domain $domain already exist with ID $out[0]\n";
@@ -466,7 +466,7 @@ for ($i=0; $i<count($zones); $i++) {
 
 		// Selezione dell'ID della zona dalla tabella DOMAIN
 		$sql = "SELECT id FROM domain WHERE name='$domain' AND iddns=$iddns;";
-		$result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+		$result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
 		// Verifico che la zona non sia gia' inserita
         	if (($out = mysql_fetch_row($result)) == NULL ) {
@@ -476,7 +476,7 @@ for ($i=0; $i<count($zones); $i++) {
 			else
 				$sql = "INSERT INTO domain VALUES (NULL,'$domain',$level,'$data',0,'','',0,0,0,0,0,'$zonetype','$zonemastertype','A','0',$iddns,0);";
 				
-			mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+			mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 
 			// Selezione del'ID del dominio appena inserito
 			$iddom = mysql_insert_id();
@@ -498,7 +498,7 @@ for ($i=0; $i<count($zones); $i++) {
                		for ($y=0; $y<count($ipdnsmaster); $y++) {
                         	$ip = ipdot2iplong($ipdnsmaster[$y]);
                                 $sql = "INSERT INTO ipdnsmaster VALUES (NULL,$iddom,$ip);";
-                                $result = mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+                                $result = mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
                         }
 		}
 
@@ -617,7 +617,7 @@ for ($i=0; $i<count($zones); $i++) {
 				}
 		
 				// Registrazione del record nel DB
-				mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+				mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 			}		
 		} 
 
@@ -629,7 +629,7 @@ for ($i=0; $i<count($zones); $i++) {
 		$address = ipdot2iplong($buf[0]);
 		$netmask = $buf[1];
 		$sql = "INSERT INTO acldomain VALUES (NULL,$iddom,$address,$netmask,'QRY');";
-		mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+		mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 	}
 	// Direttive ALLOW-TRANSFER
 	for ($j=0; $j<count($allowtrx); $j++) {
@@ -637,7 +637,7 @@ for ($i=0; $i<count($zones); $i++) {
 		$address = ipdot2iplong($buf[0]);
 		$netmask = $buf[1];
 		$sql = "INSERT INTO acldomain VALUES (NULL,$iddom,$address,$netmask,'TRX');";
-		mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+		mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 	}
 	// Direttive ALLOW-UPDATE
 	for ($j=0; $j<count($allowupd); $j++) {
@@ -645,7 +645,7 @@ for ($i=0; $i<count($zones); $i++) {
 		$address = ipdot2iplong($buf[0]);
 		$netmask = $buf[1];
 		$sql = "INSERT INTO acldomain VALUES (NULL,$iddom,$address,$netmask,'UPD');";
-		mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+		mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 	}
 	// Direttive ALLOW-NOTIFY
 	for ($j=0; $j<count($allownot); $j++) {
@@ -653,7 +653,7 @@ for ($i=0; $i<count($zones); $i++) {
 		$address = ipdot2iplong($buf[0]);
 		$netmask = $buf[1];
 		$sql = "INSERT INTO acldomain VALUES (NULL,$iddom,$address,$netmask,'NOT');";
-		mysql_query($sql,$conn) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
+		mysqli_query($conn,$sql) or die("\nERROR: impossible to execute SQL command ($sql)\n\n");
 	}
 	if ($zonetype != "*") {
 		echo "OK: Domain importing completed\n\n";
@@ -668,4 +668,4 @@ echo "$EndHeaderReport\n";
 exec ("echo \"\n$EndHeaderReport\" >> $ReportLog");
 echo "\nFor possible problems consult the report file: $ReportLog\n";
 unlink($tmpfname);
-mysql_close($conn);
+mysqli_close($conn);

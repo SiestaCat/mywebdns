@@ -22,12 +22,12 @@ if (isset($adddns)) {
 
 	// Verifica della presenza del DNS inserito nella tabella dns
 	$sql = "SELECT * FROM dns WHERE dnsfqdn='$dnsfqdn';";
-	$result = mysql_query($sql,$conn) or die(_SQLQueryError);
+	$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
         if (mysql_fetch_row($result) == NULL) {
 		$dnsip=ipdot2iplong($ip);
 		$data=date("Y-m-j");
 		$sql = "INSERT INTO dns VALUES (NULL,'$dnsfqdn','$dnsdescr',$dnsip,'$data','$dirnamed','$includezonenamed','$dirzones','$dnsreload');";
-		mysql_query($sql,$conn) or die(_SQLQueryError);
+		mysqli_query($conn,$sql) or die(_SQLQueryError);
 		showresult(_AddMsg);
 	} else showerror(_DNSRegError);
 }
@@ -81,5 +81,5 @@ echo <<< EOB
 	</HTML>
 EOB;
 
-mysql_close($conn);
+mysqli_close($conn);
 ?>

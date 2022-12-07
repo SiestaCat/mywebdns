@@ -15,8 +15,8 @@ if (isset($nslookupdns)) {
 	$tmpfname = tempnam("/tmp", "nslookup");
 	headerfile(_nslookupDNSHeader);
 	$sql = "SELECT dnsfqdn FROM dns WHERE id=$iddns;";
-        $result = mysql_query($sql,$conn) or die(_SQLQueryError);
-        $dati = mysql_fetch_array($result);
+        $result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+        $dati = mysqli_fetch_array($result);
 	exec ("nslookup -querytype=any $dati[dnsfqdn] > $tmpfname");
 	$result = file($tmpfname);
 
@@ -53,8 +53,8 @@ EOB;
 if (isset($infodns)) {
 	headerfile(_InfoDNSHeader);
         $sql = "SELECT * FROM dns WHERE id=$iddns;";
-        $result = mysql_query($sql,$conn) or die(_SQLQueryError);
-        $dati = mysql_fetch_array($result);
+        $result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+        $dati = mysqli_fetch_array($result);
 	extract($dati);
         $ip = iplong2ipdot($DNSIP);
 
@@ -114,7 +114,7 @@ EOB;
 
 	echo "\n";
         $sql = "SELECT * FROM domain WHERE iddns=$iddns;";
-        $result = mysql_query($sql,$conn) or die(_SQLQueryError);
+        $result = mysqli_query($conn,$sql) or die(_SQLQueryError);
         $numdom = mysql_num_rows($result);
         echo "\t<BR>\n";
         echo "\t<CENTER><CLASS=LINKNERO>$Mod_DomainHandled<B>$numdom</B></CENTER>\n";
@@ -133,8 +133,8 @@ if (isset($moddns)) {
 	}
 	headerfile(_ModifyDNSHeader);
         $sql = "SELECT * FROM dns WHERE id=$iddns;";
-        $result = mysql_query($sql,$conn) or die(_SQLQueryError);
-        $dati = mysql_fetch_array($result);
+        $result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+        $dati = mysqli_fetch_array($result);
 	extract($dati);
         $ip = iplong2ipdot($DNSIP);
 
@@ -187,7 +187,7 @@ echo <<< EOB
         </HTML>
 EOB;
         exit;
-	mysql_close($conn);
+	mysqli_close($conn);
 }
 
 if (isset($continuemoddns)) {
@@ -202,7 +202,7 @@ if (isset($continuemoddns)) {
         $ip = trim($ip);
         $ipdns = ipdot2iplong($ip);
         $sql = "UPDATE dns SET dnsfqdn='$dnsfqdn', dnsdescr='$dnsdescr', dnsip=$ipdns, dirnamed='$dirnamed', includezonenamed='$includezonenamed', dirzones='$dirzones', rndcreload='$dnsreload' WHERE id=$iddns;";
-        mysql_query($sql,$conn) or die(_SQLQueryError);
+        mysqli_query($conn,$sql) or die(_SQLQueryError);
         showresult(_ModifiedOkMsg);
 }
 
@@ -219,11 +219,11 @@ if (isset($deletedns)) {
 
         // Cancellazione del record di dns
         $sql = "DELETE FROM dns WHERE id=$iddns;";
-        mysql_query($sql,$conn) or die(_SQLQueryError);
+        mysqli_query($conn,$sql) or die(_SQLQueryError);
 
 	// Cancellazione dei domini del dns cancellato
 	$sql = "UPDATE domain SET state='D' WHERE iddns=$iddns;";
-        mysql_query($sql,$conn) or die(_SQLQueryError);
+        mysqli_query($conn,$sql) or die(_SQLQueryError);
        	showresult(_DeleteMsg);
 }
 
@@ -232,8 +232,8 @@ if (isset($deletedns)) {
 #
 headerfile(_ConfigDNSHeader);
 $sql = "SELECT * FROM dns;";
-$result = mysql_query($sql,$conn) or die(_SQLQueryError);
-$dati = mysql_fetch_array($result);
+$result = mysqli_query($conn,$sql) or die(_SQLQueryError);
+$dati = mysqli_fetch_array($result);
 
 echo <<< EOB
 	<DIV ALIGN=CENTER><FORM METHOD=POST ACTION=$PHP_SELF>
@@ -259,7 +259,7 @@ EOB;
 echo <<< EOB
 	</TR>
 EOB;
-} while ($dati = mysql_fetch_array($result));
+} while ($dati = mysqli_fetch_array($result));
 echo "\n";
 echo <<< EOB
 	<TR>
@@ -272,5 +272,5 @@ echo <<< EOB
 	</HTML>
 EOB;
 	
-mysql_close($conn);
+mysqli_close($conn);
 ?>

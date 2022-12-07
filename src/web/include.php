@@ -1,15 +1,14 @@
 <?php
 
-$DBdatabase = "<DATABASE>";
-$DBusername = "<ADMINISTRATOR>";
-$DBpassword = "<PASSWD>";
-$DBhost     = "<MYSQLSERVER>";
+$DBdatabase = "mywebdns";
+$DBusername = "root";
+$DBpassword = "password";
+$DBhost     = "localhost";
 
 // Funzione per la connessione al DB
 function connect_db() {
         global $DBdatabase, $DBusername, $DBpassword, $DBhost;
-        $dblink = mysql_connect($DBhost, $DBusername, $DBpassword) or die("\nERROR: cannot to connect to MySQL server\n\n");
-        @mysql_select_db($DBdatabase) or die("\nERROR: cannot select database <$database>\n\n");
+        $dblink = mysqli_connect($DBhost, $DBusername, $DBpassword, $DBdatabase) or die("\nERROR: cannot to connect to MySQL server\n\n");
 
 	session_start();
 
@@ -17,39 +16,41 @@ function connect_db() {
 }
 
 // Registrazione delle variabili di sessione
-if (!session_is_registered("session_language")) {
+if (!isset($_SESSION["session_language"])) {
 	$conn1 = connect_db();
 	$sql = "SELECT * FROM configuration WHERE id=1;";
-	$result = mysql_query($sql,$conn1) or die(_SQLQueryError);
-	$line = mysql_fetch_array($result);
-	mysql_close($conn1);
+	$result = mysqli_query($conn1,$sql) or die(_SQLQueryError);
+	$line = mysqli_fetch_array($result);
+	mysqli_close($conn1);
 	extract($line);
 
-        session_register("session_version");
-        session_register("session_language");
-        session_register("session_record_ns");
-        session_register("session_record_mx");
-        session_register("session_record_a");
-        session_register("session_record_ptr");
-        session_register("session_record_cname");
 
-	$session_version = "$VERSION";
-	$session_language = "$LANGUAGE";
-	$session_record_ns = "$RECORD_NS";
-	$session_record_mx = "$RECORD_MX";
-	$session_record_a = "$RECORD_A";
-	$session_record_ptr = "$RECORD_PTR";
-	$session_record_cname = "$RECORD_CNAME";
+		$_SESSION['session_version'] = $VERSION;
+		$_SESSION['session_language'] = $LANGUAGE;
+		$_SESSION['session_record_ns'] = $RECORD_NS;
+		$_SESSION['session_record_mx'] = $RECORD_MX;
+		$_SESSION['session_record_a'] = $RECORD_A;
+		$_SESSION['session_record_ptr'] = $RECORD_PTR;
+		$_SESSION['session_record_cname'] = $RECORD_CNAME;
+
+		$session_version = $_SESSION['session_version'];
+		$session_language = $_SESSION['session_language'];
+		$session_record_ns = $_SESSION['session_record_ns'];
+		$session_record_mx = $_SESSION['session_record_mx'];
+		$session_record_a = $_SESSION['session_record_a'];
+		$session_record_ptr = $_SESSION['session_record_ptr'];
+		$session_record_cname = $_SESSION['session_record_cname'];
+	
 }
 
-require("<PREFIX>configure/languages/$session_language/language.php");
+require(__DIR__ . "/configure/languages/$session_language/language.php");
 
 // Funzione di stampa dell'intestazione del file
 function headerfile($title) {
 	$conn1 = connect_db();
 	$sql = "SELECT * FROM configuration WHERE id=1;";
-	$result = mysql_query($sql,$conn1) or die(_SQLQueryError);
-	$line = mysql_fetch_array($result);
+	$result = mysqli_query($conn1,$sql) or die(_SQLQueryError);
+	$line = mysqli_fetch_array($result);
 	extract($line);
 	$session_language = "$LANGUAGE";
 
@@ -80,32 +81,32 @@ EOB;
 function ipdot2iplong($ipdot) {
 	$conn1 = connect_db();
         $sql = "SELECT ip2long('$ipdot');";
-        $result = mysql_query($sql,$conn1) or die(_SQLQueryError);
+        $result = mysqli_query($conn1,$sql) or die(_SQLQueryError);
         $out = mysql_fetch_row($result);
         return ($out[0]);
-	mysql_close($conn1);
+	mysqli_close($conn1);
 }
 
 // Funzione per transformazione IP: long form --> dot form
 function iplong2ipdot($iplong) {
 	$conn1 = connect_db();
         $sql = "SELECT long2ip($iplong);";
-        $result = mysql_query($sql,$conn1) or die(_SQLQueryError);
+        $result = mysqli_query($conn1,$sql) or die(_SQLQueryError);
         $out = mysql_fetch_row($result);
         return ($out[0]);
-	mysql_close($conn1);
+	mysqli_close($conn1);
 }
 
 // Funzione per transformazione NETMASK: dot form --> long form
 function maskdot2masklong($maskdot) {
 	$conn1 = connect_db();
 	$sql = "SELECT maskdot2masklong('$maskdot');";
-	$result = mysql_query($sql,$conn1) or die(_SQLQueryError);
+	$result = mysqli_query($conn1,$sql) or die(_SQLQueryError);
 	if (($out = mysql_fetch_row($result)) != NULL)
 		return ($out[0]);
 	else
 		return -1;
-	mysql_close($conn1);
+	mysqli_close($conn1);
 }
 
 // Funzione per transformazione NETMASK: long form --> dot form
@@ -114,10 +115,10 @@ function masklong2maskdot($masklong) {
                 return -1;
 	$conn1 = connect_db();
         $sql = "SELECT masklong2maskdot($masklong);";
-        $result = mysql_query($sql,$conn1) or die(_SQLQueryError);
+        $result = mysqli_query($conn1,$sql) or die(_SQLQueryError);
         $out = mysql_fetch_row($result);
         return ($out[0]);
-	mysql_close($conn1);
+	mysqli_close($conn1);
 }
 
 // Mostra un messaggio di errore a video
@@ -179,12 +180,12 @@ function findarray($key,$array) {
 function checkdns() {
 	$conn1 = connect_db();
 	$sql= "SELECT id FROM dns;";
-	$result = mysql_query($sql,$conn1) or die(_SQLQueryError);
+	$result = mysqli_query($conn1,$sql) or die(_SQLQueryError);
 	if (mysql_fetch_row($result)==NULL)
 		return (0);
 	else
 		return (1);
-	mysql_close($conn1);
+	mysqli_close($conn1);
 }
 
 // Verifica la correttezza di un indirizzo IP in dot form
