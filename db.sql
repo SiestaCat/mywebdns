@@ -1,12 +1,7 @@
--- MySQL dump 8.21
---
--- Host: localhost    Database: mywebdns
----------------------------------------------------------
--- Server version	3.23.49
-
---
--- Table structure for table 'acldomain'
---
+-- --------------------------------------------------------
+-- Host:                         localhost
+-- Server version:         		 5.7.40 - MySQL Community Server (GPL)
+-- --------------------------------------------------------
 
 CREATE TABLE acldomain (
   ID int(10) unsigned NOT NULL auto_increment,
@@ -15,7 +10,7 @@ CREATE TABLE acldomain (
   NETMASK int(2) unsigned NOT NULL default '0',
   TYPE char(3) NOT NULL default '',
   PRIMARY KEY  (ID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'acldomain'
@@ -36,7 +31,7 @@ CREATE TABLE configuration (
   RECORD_PTR int(2) unsigned NOT NULL default '0',
   RECORD_CNAME int(2) unsigned NOT NULL default '0',
   PRIMARY KEY  (ID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'configuration'
@@ -55,13 +50,13 @@ CREATE TABLE dns (
   DNSFQDN varchar(60) NOT NULL default '',
   DNSDESCR varchar(60) default NULL,
   DNSIP int(10) unsigned NOT NULL default '0',
-  DATA date NOT NULL default '0000-00-00',
+  DATA date NOT NULL,
   DIRNAMED varchar(60) NOT NULL default '',
   INCLUDEZONENAMED varchar(60) NOT NULL default '',
   DIRZONES varchar(60) NOT NULL default '',
   RNDCRELOAD varchar(60) NOT NULL default '',
   PRIMARY KEY  (ID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'dns'
@@ -77,7 +72,7 @@ CREATE TABLE domain (
   ID int(10) unsigned NOT NULL auto_increment,
   NAME varchar(60) NOT NULL default '',
   LEVEL int(1) NOT NULL default '0',
-  DATA date NOT NULL default '0000-00-00',
+  DATA date NOT NULL,
   TTL int(5) unsigned default '86400',
   HOSTDNS varchar(60) NOT NULL default '',
   ROOTDNS varchar(60) NOT NULL default '',
@@ -93,7 +88,7 @@ CREATE TABLE domain (
   IDDNS int(5) unsigned NOT NULL default '0',
   LOCKDEL int(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (ID,NAME)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'domain'
@@ -110,7 +105,7 @@ CREATE TABLE ipdnsforwarders (
   IDDOM int(10) unsigned NOT NULL default '0',
   IP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (ID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'ipdnsforwarders'
@@ -127,7 +122,7 @@ CREATE TABLE ipdnsmaster (
   IDDOM int(10) unsigned NOT NULL default '0',
   IP int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (ID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'ipdnsmaster'
@@ -145,7 +140,7 @@ CREATE TABLE mysql_auth (
   GROUPS varchar(25) NOT NULL default '',
   FULLNAME varchar(50) NOT NULL default '',
   PRIMARY KEY  (USERNAME)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'mysql_auth'
@@ -160,7 +155,7 @@ CREATE TABLE mysql_auth_group (
   ID int(5) unsigned NOT NULL auto_increment,
   GROUPS varchar(25) NOT NULL default '',
   PRIMARY KEY  (ID,GROUPS)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'mysql_auth_group'
@@ -183,7 +178,7 @@ CREATE TABLE recordmaster (
   HOSTTARGET varchar(60) default NULL,
   IP int(10) unsigned default NULL,
   PRIMARY KEY  (ID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'recordmaster'
@@ -204,7 +199,7 @@ CREATE TABLE recordreverse (
   PRIORITY int(2) unsigned default NULL,
   HOSTTARGET varchar(60) default NULL,
   PRIMARY KEY  (ID)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 --
 -- Dumping data for table 'recordreverse'
