@@ -1,0 +1,22 @@
+LIBDIR = @LIBDIR@
+CC = @CC@
+INCLUDE = @MYSQL_INCLUDE@
+
+#   the default target
+all: build
+
+# build the shared object file for Apache
+build: my_libip.so
+
+#   compile the shared object file
+my_libip.so: my_libip.c
+	$(CC) -fpic -c $(INCLUDE) my_libip.c
+	$(CC) -shared -lc -lm -o my_libip.so my_libip.o
+
+#   install the shared object file
+install:
+	cp my_libip.so $(LIBDIR)
+
+#   cleanup
+clean:
+	rm -f my_libip.so

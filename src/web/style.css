@@ -1,0 +1,31 @@
+.tabcheck {
+	color:#ffffff; font-size:12px; text-decoration:none; font-weight:bold; background-color:#909090; text-align:center;
+}
+.tabuncheck {
+	color:black; font-size:12px; text-decoration:none; font-weight:normal; background-color:#efefef; text-align:center;
+}
+.tabtitle {
+	color:#ffffff; font-size:18px; text-decoration:none; font-weight:bold; background-color:#909090; text-align:center;
+}
+.dominfo {
+	color:black; font-size:12px; text-align:left; text-decoration:none; font-weight:bold; background-color:#dddddd;
+}
+
+A.LINKGRIGIO {
+        COLOR: #efefef; FONT-FAMILY: Arial,Verdana; FONT-SIZE: 11pt; FONT-STYLE: normal; FONT-WEIGHT: normal; TEXT-DECORATION: none
+}
+A.LINKGRIGIOITALIC {
+        COLOR: #efefef; FONT-FAMILY: Arial,Verdana; FONT-SIZE: 11pt; FONT-STYLE: italic; FONT-WEIGHT: normal; TEXT-DECORATION: none
+}
+A.LINKNERO {
+        COLOR: #000000; FONT-FAMILY: Arial,Verdana; FONT-SIZE: 11pt; FONT-STYLE: normal; FONT-WEIGHT: normal; TEXT-DECORATION: underline
+}
+A.MENUNERO {
+        COLOR: #000000; FONT-FAMILY: Arial,Verdana; FONT-SIZE: 9pt; FONT-STYLE: normal; FONT-WEIGHT: normal; TEXT-DECORATION: none
+}
+SPAN.TESTOARANCIO {
+        COLOR: #ff9900; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; FONT-SIZE: 12px; FONT-WEIGHT: bold
+}
+SPAN.TESTONERO {
+        COLOR: black; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; FONT-SIZE: 12px; FONT-WEIGHT: bold
+}

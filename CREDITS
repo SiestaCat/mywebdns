@@ -1,0 +1,15 @@
+Below are people who have made a significant contribution to myWebDNS's
+development, and their contact information.  
+
+This list is sorted by name and formatted to allow easy grepping and
+beautification by scripts.  The fields are: name (N), email (E), web-address
+(W), PGP key ID and fingerprint (P) and description (D).
+
+--
+N: Foci Daniele
+E: daniele@foci.it
+D: Graphic Support
+
+N: Vitale Ferruccio
+E: ferruccio.vitale@tin.it
+D: MySQL Support

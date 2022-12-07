@@ -1,0 +1,112 @@
+
+                  myWebDNS Installation Procedure
+                  ===============================
+
+------------
+Introduction
+------------
+myWebDNS is a MySQL/PHP-Web based package to manage a DNS server configured with Bind 9. It permit to operate as
+administrator to create and manage the DNS, and as a user to create and manage the domains. The package as written completly in
+PHP and use Javascript for various checks.
+
+The package consist of two parts:
+
+1. The web part
+Used to manage with a web server the dns. The authentication is based on MySQL.
+
+2. The script part
+Used to import the domain's configuration from the dns into MySQL db and for update and check the zone files.
+
+This software is distribuited under a GPL license.
+
+For many info refer to sourceforge page project: http://sourceforge.net/projects/mywebdns/ 
+
+------------------
+Build Requirements
+------------------
+
+	o Apache HTTP Server version 1.3.xx
+	o MySQL 3.23.xx server and client
+	o PHP 4.1.x compiled as module and script language
+	o mod_auth_mysql-2.20 to allows users to use MySQL databases for user authentication
+	o Disk space: ~<1 MB to unpack, ~<1 MB to install
+
+-------------------------
+Installation Instructions
+-------------------------
+The configure script defaults to look for MySQL and PHP in /usr/local. If you have a different
+setup, you can override these defaults using --with-mysql=dir anw --with-php=dir, respectively.
+For example:
+
+./configure --with-mysql=/usr/local/mysql --with-php=/usr/local/php
+
+The basic commands you must execute to install a myWebDNS are: 
+
+shell> gunzip < myWebDNS-VERSION.tar.gz | tar -xvf -
+shell> cd myWebDNS-VERSION
+shell> ./configure
+shell> ./install.sh
+
+After the installation modifying the httpd.conf file so that it allows the authentication on DB MySQL
+is necessary. A modification example could be the following:
+
+        Auth_MySQL_Info <mysqlserver> <admin-login> <admin-password>
+        <Directory />
+                Options FollowSymLinks
+                Auth_MySQL_DB mywebdns
+                AuthName "myWebDNS"
+                AuthType Basic
+                require valid-user
+                Auth_MySQL_Encryption_Types MySQL
+                Auth_MySQL_Password_Table mysql_auth
+                Auth_MySQL_Group_Table  mysql_auth
+                Auth_MySQL_Username_Field username
+                Auth_MySQL_Password_Field password
+                Auth_MySQL_Group_Field groups
+        </Directory>
+
+To make the installation you must be root.
+If MyWebDNS turns out already installed, neither the DB nor the administrator will be modified.
+At the end of the installation use a browser to link up to the myWebDNS-webserver using the installation
+parameters for the authentication.
+
+Good luck!
+
+---------------
+Common Problems
+---------------
+Q: I am not able to see the icons
+A: You must comment the "Alias /icons/" line in your httpd.conf file e restart Apache.
+
+---------
+Resources
+---------
+
+R1. Basics
+         Sourceforge: http://sourceforge.net/projects/mywebdns/
+                 WWW: http://mywebdns.sourceforge.net/
+
+R2. Email
+       Pasquale Affinito - pasaff@tin.it
+
+R3. Mailing Lists
+       Help List
+     (subscriptions): http://lists.sourceforge.net/mailman/listinfo/mywebdns-help
+          (archives): http://www.geocrawler.com/redir-sf.php3?list=mywebdns-help
+
+      Developer List
+     (subscriptions): http://lists.sourceforge.net/mailman/listinfo/mywebdns-developer
+          (archives): http://www.geocrawler.com/redir-sf.php3?list=mywebdns-developer
+
+R4. Tracking System
+       http://sourceforge.net/tracker/?group_id=47859
+
+R5. CVS Repositories
+       Anonymous CVS: cvs.mywebdns.sourceforge.net
+      (instructions): http://mywebdns.sourceforge.net/cvs.html
+
+     Development CVS: cvs.mywebdns.sourceforge.net
+      (instructions): http://mywebdns.sourceforge.net/cvs.html
+
+R6. Mirrors
+       http://mywebdns.sourceforge.net/mirrors.html

@@ -1,0 +1,60 @@
+24-APR-2002 version 1.1
+=======================
+  * added check configuration to function.js
+  * bugfix on check DB administrator in configuration and update1 script
+  * bugfix on ttl in imporbind.php
+  * bugfix on Makefile for compiling my_libip.c
+
+22-APR-2002 version 1.1.rc4
+===========================
+  * added update1.sh for updating DB
+  * added check for MySQL error to configure script
+  * added the control for the existence of the file in viewfile.php
+  * added the control for access to administration modules
+  * added configuration table to DB
+  * bugfix in some modules
+
+19-APR-2002 version 1.1.rc3
+===========================
+  * installing long2ip and ip2long as MySQL functions
+  * added 2 new functions : maskdot2masklong and masklong2maskdot
+  * bugfix in include.php on DOCUMENT_ROOT environment variable
+  * added "Common Problems" section in INSTALL file
+  * bugfix in acltype.php module on ACL insertion
+
+17-APR-2002 version 1.1.rc2
+===========================
+  * add viewfile.php to view the named file
+  * now you can add 2 NS record to a domain in edit mode
+  * bugfix in updatednsslave.php and updatedns.php for creation of the include zone named.conf file
+  * bugfix in configure script for mysqlshow command
+  * bugfix in install.sh script on grant privileges to administrator
+  * bugfix in functions.js for check DNS configuration
+
+15-APR-2002 version 1.1.rc1
+===========================
+  * bugfix in functions.js for add dns
+  * bugfix in importbind.php on readline() function
+  * bugfix in importbind.php for check named-xfer command
+  * bugfix in configure DNS module
+
+14-APR-2002 version 1.1.rc0
+===========================
+  * rewrite configure in sh script shell
+  * bugfix in install script
+
+31-MAR-2002 version 1.0
+=======================
+  * bugfix in configure script
+
+11-MAR-2002 version 1.0.rc1
+===========================
+  * bugfix in domain/editdom.php
+
+06-MAR-2002 version 1.0.rc0
+===========================
+  * bugfix in admin/users.php
+
+03-MAR-2002
+===========
+  * Beginning first development of myWebDNS 1.0

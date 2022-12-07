@@ -1,0 +1,334 @@
+#!/bin/sh
+
+ERROR="./config.error"
+CONFIGFILE="./config.cache"
+
+silent=
+MYDB=mywebdns
+MYSQL_INCLUDE=
+INSTALLDB=NO
+INSTALLADMIN=NO
+INSTALLFUNCTION=NO
+LISTFUNCTION=""
+CHECKFUNCTION=""
+PREFIX=/usr/local/mywebdns
+MYSQLSERVER=`hostname`
+ROOTLOGIN=root
+ROOTPWD=NONE
+wROOTPWD=
+ADMINLOGIN=admin
+ADMINPWD=NONE
+wADMINPWD=
+TOMAILCHECK=root@$MYSQLSERVER
+MYSQL_BASE_DIR=/usr/local
+PHP_BASE_DIR=/usr/local
+
+ac_prev=
+for ac_option
+do
+	if test -n "$ac_prev"; then
+		eval "$ac_prev=\$ac_option"
+		ac_prev=
+		continue
+	fi
+
+	case "$ac_option" in
+		-*=*) ac_optarg=`echo "$ac_option" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+		*) ac_optarg= ;;
+	esac
+
+	case "$ac_option" in
+		--prefix=*)
+			PREFIX="$ac_optarg" ;;
+		--hostserver=*)
+			MYSQLSERVER="$ac_optarg" ;;
+		--rootlogin=*)
+			ROOTLOGIN="$ac_optarg" ;;
+		--rootpwd=*)
+			ROOTPWD="$ac_optarg" 
+			wROOTPWD="-p$ac_optarg" ;;
+		--adminlogin=*)
+			ADMINLOGIN="$ac_optarg" ;;
+		--adminpwd=*)
+			ADMINPWD="$ac_optarg" 
+			wADMINPWD="-p$ac_optarg" ;;
+		--mailcheck=*)
+			TOMAILCHECK="$ac_optarg";;
+		--with-mysql=*)
+			MYSQL_BASE_DIR="$ac_optarg";;
+		--with-php=*)
+			PHP_BASE_DIR="$ac_optarg";;
+		-q | -quiet | --quiet | --quie | --qui | --qu | --q \
+  		   | -silent | --silent | --silen | --sile | --sil)
+    			silent=yes ;;
+  		-help | --help | --hel | --he)
+cat << EOF
+Usage: configure [options]
+Options: [defaults in brackets after descriptions]
+Configuration:
+  --help                   print this message
+  --quiet, --silent        do not print \`checking...' messages
+Directory and file names:
+  --prefix=PREFIX          install architecture-independent files in PREFIX
+                           [$PREFIX]
+  --hostserver=MYSQLSERVER MySQL host server
+                           [$MYSQLSERVER]
+  --rootlogin=ROOTLOGIN    root login
+                           [$ROOTLOGIN]
+  --rootpwd=ROOTPWD        root password
+                           [$ROOTPWD]
+  --adminlogin=ADMINLOGIN  mywebdns administrator login
+                           [$ADMINLOGIN]
+  --adminpwd=ADMINPWD      mywebdns administrator password
+                           [$ADMINPWD]
+  --mailcheck=TOMAILCHECK  user mail fo check
+			   [$TOMAILCHECK]
+  --with-mysql=DIR	   Specify the MySQL installation directory.
+			   [$MYSQL_BASE_DIR]
+  --with-php=DIR	   Specify the MySQL installation directory.
+			   [$PHP_BASE_DIR]
+EOF
+			exit 0 ;;
+                -*)
+                        echo "configure: error: $ac_option: invalid option; use --help to show usage" 1>&2;
+                        exit 1  
+                        ;;
+		*)
+    			if test -n "`echo $ac_option| sed 's/[-a-z0-9.]//g'`"; then
+      				echo "configure: warning: $ac_option: invalid host type" 1>&2
+    			fi
+    			if test "x$nonopt" != xNONE; then
+      				{ echo "configure: error: can only configure for one host and one target at a time" 1>&2; exit 1; }
+    			fi
+    			nonopt="$ac_option"
+    			;;
+	esac
+done
+
+if test -n "$ac_prev"; then
+	{ echo "configure: error: missing argument to --`echo $ac_prev | sed 's/_/-/g'`" 1>&2; exit 1; }
+fi
+
+# File descriptor usage:
+# 0 standard input
+# 1 file creation
+# 2 errors and warnings
+# 3 some systems may open it to /dev/tty
+# 4 used on the Kubota Titan
+# 5 compiler messages saved in config.log
+# 6 checking for... messages and results
+
+if test "$silent" = yes; then
+	exec 6>/dev/null
+else
+	exec 6>&1
+fi
+
+if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
+	if (echo -n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
+		ac_n= ac_c='
+' ac_t='        '
+	else  
+		ac_n=-n ac_c= ac_t=
+	fi
+else
+	ac_n= ac_c='\c' ac_t=
+fi
+
+COMMAND_LIST="gcc awk grep sed whoami wc make"
+for COMMAND in $COMMAND_LIST
+do
+	FOUND=
+	ac_word=$COMMAND
+	echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+	IFS="${IFS=   }"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+	for ac_dir in $PATH; do
+    		test -z "$ac_dir" && ac_dir=.
+        	if test -f $ac_dir/$ac_word; then
+        		FOUND="yes"
+                	break
+        	fi
+  		IFS="$ac_save_ifs"
+	done
+	if test -z $FOUND; then
+		echo "$ac_t""not found!" 1>&6
+		exit 1
+	else
+		echo "$ac_t""yes" 1>&6
+	fi
+done
+
+echo $ac_n "checking for MySQL directory""... $ac_c" 1>&6
+if test ! -d $MYSQL_BASE_DIR; then
+        echo "$ac_t""configure: error: $MYSQL_BASE_DIR not is a valid directory!" 1>&6
+	exit 1
+else
+        echo "$ac_t""$MYSQL_BASE_DIR" 1>&6
+fi
+
+if test -f $MYSQL_BASE_DIR/include/mysql/mysql.h; then
+        MYSQL_INCDIR=$MYSQL_BASE_DIR/include/mysql
+        MYSQL_LIBDIR=$MYSQL_BASE_DIR/lib/mysql
+	MYSQL_BINDIR=$MYSQL_BASE_DIR/bin
+elif test -f $MYSQL_BASE_DIR/include/mysql.h; then
+        MYSQL_INCDIR=$MYSQL_BASE_DIR/include
+        MYSQL_LIBDIR=$MYSQL_BASE_DIR/lib
+	MYSQL_BINDIR=$MYSQL_BASE_DIR/bin
+else
+        { echo "configure: error: Invalid MySQL directory - unable to find mysql.h under $MYSQL_BASE_DIR" 1>&2; exit 1; }
+fi
+MYSQL_INCLUDE=-I$MYSQL_INCDIR
+
+echo $ac_n "checking for PHP directory""... $ac_c" 1>&6
+if test ! -d $PHP_BASE_DIR; then
+        echo "$ac_t""configure: error: Invalid PHP directory $PHP_BASE_DIR!" 1>&6
+	exit 1
+else
+        echo "$ac_t""$PHP_BASE_DIR" 1>&6
+	if test ! -f $PHP_BASE_DIR/bin/php; then
+        	echo "configure: error: Invalid PHP directory - unable to find php under $PHP_BASE_DIR/bin" 1>&2;
+		exit 1
+	fi
+fi
+
+echo $ac_n "checking for myWebDNS DB""... $ac_c" 1>&6
+exec 2>$ERROR
+EXIST=`$MYSQL_BINDIR/mysqlshow -h$MYSQLSERVER -u$ROOTLOGIN $wROOTPWD | grep $MYDB  | awk '{print $2}'`
+exec 2>&1
+if [ `cat $ERROR | wc -l | awk '{print $1}'` -gt 0 ]; then
+	ERROR_OUTPUT=`sed -n '1p' $ERROR`
+	echo "$ac_t""configure: error: $ERROR_OUTPUT" 1>&2
+	exit 1
+fi
+if test -z "$EXIST"; then
+        echo "$ac_t""not found!" 1>&6
+	INSTALLDB="YES"
+	CHECKDB="Yes"
+else
+	echo "$ac_t""found!" 1>&6
+	INSTALLDB="NO"
+	CHECKDB="No (Already Exist)"
+fi
+
+echo $ac_n "checking for myWebDNS administrator""... $ac_c" 1>&6
+if [ "$ADMINPWD" = "NONE" ]; then 
+	PWD=
+else
+	PWD=$ADMINPWD
+fi
+exec 2>$ERROR
+EXIST=`$MYSQL_BINDIR/mysql -h$MYSQLSERVER -u$ROOTLOGIN $wROOTPWD -Dmysql -e "SELECT * FROM mysql.db WHERE host='$MYSQLSERVER' AND db='$MYDB' AND user='$ADMINLOGIN';"`
+exec 2>&1
+if [ `cat $ERROR | wc -l | awk '{print $1}'` -gt 0 ]; then
+	ERROR_OUTPUT=`sed -n '1p' $ERROR`
+	echo "$ac_t""configure: error: $ERROR_OUTPUT" 1>&2
+	exit 1
+fi
+exec 2>$ERROR
+EXIST=`$MYSQL_BINDIR/mysql -h$MYSQLSERVER -u$ROOTLOGIN $wROOTPWD -Dmysql -e "SELECT * FROM mysql.user WHERE host='$MYSQLSERVER' AND user='$ADMINLOGIN' AND password=PASSWORD('$ADMINPWD');"`
+exec 2>&1
+if [ `cat $ERROR | wc -l | awk '{print $1}'` -gt 0 ]; then
+        ERROR_OUTPUT=`sed -n '1p' $ERROR`
+        echo "$ac_t""configure:: error: $ERROR_OUTPUT" 1>&2
+        exit 1
+fi
+if test -z "$EXIST"; then
+	echo "$ac_t""not found!" 1>&6
+	INSTALLADMIN=YES
+	CHECKADMIN=Yes
+else
+        echo "$ac_t""found!" 1>&6
+	INSTALLADMIN=NO
+	CHECKADMIN="No (Already Exist)"
+fi
+
+if [ "$INSTALLDB" = "NO" ]; then
+	echo $ac_n "checking for myWebDNS updates""... $ac_c" 1>&6
+	exec 2>$ERROR
+	EXIST=`$MYSQL_BINDIR/mysql -h$MYSQLSERVER -u$ROOTLOGIN $wROOTPWD -D$MYDB -e "SHOW TABLES;"  | grep -i configuration | awk '{print $1}'`
+	exec 2>&1
+	if [ `cat $ERROR | wc -l | awk '{print $1}'` -gt 0 ]; then
+       		ERROR_OUTPUT=`sed -n '1p' $ERROR`
+       		echo "$ac_t""configure: error: $ERROR_OUTPUT" 1>&2
+       		exit 1
+	fi
+	if test -z "$EXIST"; then
+		echo "$ac_t""run updates/update1.sh" 1>&2
+		exit 1
+	fi
+	echo "$ac_t""done" 1>&6
+fi
+
+FUNCTION_LIST="long2ip ip2long maskdot2masklong masklong2maskdot"
+FOUND="no"
+for FUNCTION in $FUNCTION_LIST
+do
+        ac_word=$FUNCTION
+        echo $ac_n "checking for function $ac_word""... $ac_c" 1>&6
+	exec 2>$ERROR
+	EXIST=`$MYSQL_BINDIR/mysql -h$MYSQLSERVER -u$ROOTLOGIN $wROOTPWD -Dmysql -e "SELECT name FROM func WHERE name='$ac_word' AND dl='my_libip.so';"`
+	exec 2>&1
+	if [ `cat $ERROR | wc -l | awk '{print $1}'` -gt 0 ]; then
+       		ERROR_OUTPUT=`sed -n '1p' $ERROR`
+       		echo "$ac_t""configure: error: $ERROR_OUTPUT" 1>&2
+       		exit 1
+	fi
+	if test -z "$EXIST"; then
+        	echo "$ac_t""not found!" 1>&6
+		LISTFUNCTION="$LISTFUNCTION $ac_word"
+		INSTALLFUNCTION=YES
+		CHECKFUNCTION="$CHECKFUNCTION $ac_word"
+		FOUND="yes"
+	else
+        	echo "$ac_t""found!" 1>&6
+	fi
+done
+
+if [ "$FOUND" = "no" ]; then
+	CHECKFUNCTION=" No (Already Exist)"
+fi
+
+LIBDIR=`echo "/usr/lib" | sed 's/\//\\\\\//g'`
+MYSQL_INCLUDE=`echo "$MYSQL_INCLUDE" | sed 's/\//\\\\\//g'`
+echo $ac_n "creating ./src/lib/Makefile""... $ac_c" 1>&6
+
+sed 's/@LIBDIR@/'"$LIBDIR"'/1' ./src/lib/Makefile.in | \
+sed 's/@CC@/gcc/1' | \
+sed 's/@MYSQL_INCLUDE@/'"$MYSQL_INCLUDE"'/1' > ./src/lib/Makefile
+
+echo "$ac_t""done" 1>&6
+
+
+cat << EOF
+
+Config files successfully generated by ./configure !
+
+  Install prefix   : $PREFIX
+  Web Directory    : $PREFIX/web
+  Script Directory : $PREFIX/script
+
+  MySQL Server			$MYSQLSERVER
+  Root Login			$ROOTLOGIN (with password "$ROOTPWD")
+  Admin Login			$ADMINLOGIN (with password "$ADMINPWD")
+  Mail To Check			$TOMAILCHECK
+  Install DB			$CHECKDB
+  Install Admin			$CHECKADMIN
+  Install Function	       $CHECKFUNCTION
+
+Run ./install.sh
+EOF
+
+echo "PREFIX=$PREFIX"			>  $CONFIGFILE
+echo "MYSQL_BASE_DIR=$MYSQL_BASE_DIR"	>> $CONFIGFILE
+echo "PHP_BASE_DIR=$PHP_BASE_DIR"	>> $CONFIGFILE
+echo "INSTALLDB=$INSTALLDB"		>> $CONFIGFILE
+echo "INSTALLADMIN=$INSTALLADMIN"	>> $CONFIGFILE
+echo "INSTALLFUNCTION=$INSTALLFUNCTION"	>> $CONFIGFILE
+echo "LISTFUNCTION=$LISTFUNCTION"	>> $CONFIGFILE
+echo "MYSQLSERVER=$MYSQLSERVER"		>> $CONFIGFILE
+echo "DATABASE=$MYDB"			>> $CONFIGFILE
+echo "ROOT=$ROOTLOGIN"			>> $CONFIGFILE
+echo "ROOTPWD=$ROOTPWD"			>> $CONFIGFILE
+echo "ADMINISTRATOR=$ADMINLOGIN"	>> $CONFIGFILE
+echo "ADMINPWD=$ADMINPWD"		>> $CONFIGFILE
+echo "TOMAILCHECK=$TOMAILCHECK"		>> $CONFIGFILE
