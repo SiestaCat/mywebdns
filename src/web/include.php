@@ -1,4 +1,4 @@
-<?
+<?php
 
 $DBdatabase = "<DATABASE>";
 $DBusername = "<ADMINISTRATOR>";

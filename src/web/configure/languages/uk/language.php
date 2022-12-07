@@ -1,4 +1,4 @@
-<?
+<?php
 // Variabili globali
 $array_languages = array("Italian","English");
 $array_languages_symbols = array("it","uk");

@@ -1,4 +1,4 @@
-<?
+<?php
 // Variabili globali
 $array_languages = array("Italiano","Inglese");
 $array_languages_symbols = array("it","uk");
@@ -27,10 +27,10 @@ $M3_item3 = "Gruppi";
 $M3_item4 = "Cambia password";
 
 // Main Page
-$MainTitle = "Che cos'è myWebDNS?";
+$MainTitle = "Che cos'ï¿½ myWebDNS?";
 $MainTitle = "What is myWebDNS?";
-$Description = "myWebDNS è un software basato su MySQL/PHP per amministrare un server DNS configurato con Bind 9. Permette sia di operare come amministratore per creare  e gestire il DNS che come utente finale per poter gestire i domini. Il programma \xe8 sviluppato complemtamente in PHP e usa Javascript per effettuare diversi check di controllo.";
-$License = "Questo software è distribuito sotto licenza GPL.";
+$Description = "myWebDNS ï¿½ un software basato su MySQL/PHP per amministrare un server DNS configurato con Bind 9. Permette sia di operare come amministratore per creare  e gestire il DNS che come utente finale per poter gestire i domini. Il programma \xe8 sviluppato complemtamente in PHP e usa Javascript per effettuare diversi check di controllo.";
+$License = "Questo software ï¿½ distribuito sotto licenza GPL.";
 $Info = "Per maggiori informazioni fare riferimento alla pagina del progetto: ";
 $Comment = "Per segnalare errori o commenti mandami un email a: ";
 
@@ -121,16 +121,16 @@ define("_CheckInputError","Non sono stati inseriti tutti i parametri correttamen
 define("_CheckIPError","IP inserito non corretto");
 define("_CheckRecoverDomain","Nessun dominio da recuperare");
 define("_CopyLanguagesError","Errore durante la copia del file di linguaggio");
-define("_DomainRecoverError","Recupero impossibile. Questo dominio già esiste");
-define("_DomainRegError","Dominio già esistente");
+define("_DomainRecoverError","Recupero impossibile. Questo dominio giï¿½ esiste");
+define("_DomainRegError","Dominio giï¿½ esistente");
 define("_DNSError","Nessun DNS configurato");
-define("_DNSRegError","DNS già registrato");
+define("_DNSRegError","DNS giï¿½ registrato");
 define("_ErronNoLanguage","Nessun linguaggio");
 define("_FindDomainError","Dominio non trovato");
 define("_FindFileError","File non trovato");
 define("_NotFileLanguagesError","File di linguaggio non trovato");
 define("_SelectDomainError","Nessun dominio selezionato");
-define("_TLDError","Il dominio inserito non è riconosciuto");
+define("_TLDError","Il dominio inserito non ï¿½ riconosciuto");
 define("_SQLQueryError","Impossibile eseguire il comando SQL");
 
 // Operazioni o bottoni

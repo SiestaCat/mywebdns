@@ -1,4 +1,4 @@
-<?
+<?php
 require("../include.php");
 $conn=connect_db();
 
@@ -48,7 +48,7 @@ EOB;
 echo <<< EOB
        	<TR>
 		<TD BGCOLOR="#DDDDDD" WIDTH=60% NOWRAP ALIGN=RIGHT VALIGN=MIDDLE><FONT FACE=Lucida SIZE=3><B>$Mod_Dom_Lev</B></FONT></TD>
-        	<TD WIDTH=40% NOWRAP ALIGN=LEFT  VALIGN=MIDDLE><CLASS=LINKNERO>$LEVEL °</TD>
+        	<TD WIDTH=40% NOWRAP ALIGN=LEFT  VALIGN=MIDDLE><CLASS=LINKNERO>$LEVEL ï¿½</TD>
 	</TR>
 EOB;
 	}

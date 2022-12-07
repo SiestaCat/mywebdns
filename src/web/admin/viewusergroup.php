@@ -1,4 +1,4 @@
-<?
+<?php
 require("../include.php");
 $conn=connect_db();
 

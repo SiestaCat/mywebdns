@@ -1,4 +1,4 @@
-<?
+<?php
 require("../include.php");
 $conn=connect_db();
 
@@ -66,7 +66,7 @@ EOB;
 # Aggiunge un utente
 #
 if (isset($adduser)) {
-	// Verifico che l'utente non sia già inserito
+	// Verifico che l'utente non sia giï¿½ inserito
 	$login = strtolower($login);
         $sql = "SELECT * FROM mysql_auth WHERE username='$login';";
         $result =  mysql_query($sql,$conn) or die(_SQLQueryError);
