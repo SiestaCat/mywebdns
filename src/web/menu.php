@@ -14,7 +14,7 @@ $conn = connect_db();
 <DIV ALIGN="LEFT">
 	<TABLE WIDTH="100%" BORDER="0">
 		<TR><TD ALIGN=CENTER><A HREF="main.php" TARGET="mainFrame"><img SRC="/images/logo.jpg" ALT="Homepage" BORDER=0 WIDTH=181 HEIGHT=58></TD></TR> 
-		<TR><TD ALIGN=RIGHT><FONT COLOR="#DDDDDD"><TT><B>ver. $_SESSION['session_version']</B></TT></FONT></TD></TR>
+		<TR><TD ALIGN=RIGHT><FONT COLOR="#DDDDDD"><TT><B>ver. <?=$_SESSION['session_version']?></B></TT></FONT></TD></TR>
 		<TR><TD>&nbsp;</TD></TR> 
 
 		<TR BGCOLOR="#DDDDDD"> <TD><IMG ALT="" BORDER=0 HEIGHT=1 SRC="/images/spacer.gif" WIDTH=1><BR></TD></TR> 
