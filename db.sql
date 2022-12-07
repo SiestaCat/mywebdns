@@ -136,7 +136,7 @@ CREATE TABLE ipdnsmaster (
 
 CREATE TABLE mysql_auth (
   USERNAME varchar(25) NOT NULL default '',
-  PASSWORD varchar(25) NOT NULL default '',
+  PASSWORD varchar(41) NOT NULL default '',
   GROUPS varchar(25) NOT NULL default '',
   FULLNAME varchar(50) NOT NULL default '',
   PRIMARY KEY  (USERNAME)
