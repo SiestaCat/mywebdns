@@ -1,5 +1,7 @@
 <?php
 
+$PHP_SELF = $_SERVER['PHP_SELF'];
+
 $DBdatabase = "mywebdns";
 $DBusername = "root";
 $DBpassword = "password";
