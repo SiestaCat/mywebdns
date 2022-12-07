@@ -17,10 +17,7 @@
 // | Autore : Pasquale Affinito                                         |
 // +--------------------------------------------------------------------+
 
-$DBdatabase = "<DATABASE>";
-$DBusername = "<ADMINISTRATOR>";
-$DBpassword = "<PASSWD>";
-$DBhost     = "<MYSQLSERVER>";
+require(__DIR__ . "/../web/mysql_config.php");
 
 $ReportLog = "/tmp/checkdns_report.log";
 $HeaderReport = "***************************************\n".

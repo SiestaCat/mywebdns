@@ -2,10 +2,7 @@
 
 $PHP_SELF = $_SERVER['PHP_SELF'];
 
-$DBdatabase = "mywebdns";
-$DBusername = "root";
-$DBpassword = "password";
-$DBhost     = "localhost";
+require(__DIR__ . "/mysql_config.php");
 
 // Funzione per la connessione al DB
 function connect_db() {

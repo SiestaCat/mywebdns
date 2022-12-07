@@ -9,10 +9,7 @@
 // | Autore : Pasquale Affinito                                         |
 // +--------------------------------------------------------------------+
 
-$DBdatabase = "<DATABASE>";
-$DBusername = "<ADMINISTRATOR>";
-$DBpassword = "<PASSWD>";
-$DBhost     = "<MYSQLSERVER>";
+require(__DIR__ . "/../web/mysql_config.php");
 
 // Setto il tempo di esecuzione in maniera illimitata
 set_time_limit(0);
