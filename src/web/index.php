@@ -2,7 +2,7 @@
 
 require("./include.php");
 $conn = connect_db();
-$PHP_AUTH_USER = 'admin';
+
 if (!isset($PHP_AUTH_USER)) {
 	Header("WWW-Authenticate: Basic realm=\"WebDNS\"");
 	Header("HTTP/1.0 401 Accesso negato!!!");
